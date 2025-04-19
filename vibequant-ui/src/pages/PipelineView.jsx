@@ -43,7 +43,25 @@ const mockProjects = [
     pnl: [5, 8, -2, 3, 7, 9, 3, -1, 4, 6], 
     status: 'live',
     tScore: 76,
-    cumulativePnl: 42.5
+    cumulativePnl: 42.5,
+    investmentAmount: 100000, // Initial investment in USD
+    currentValue: 142500, // Current portfolio value
+    returns: 42.5, // Return percentage
+    maxDrawdown: 8.2, // Maximum drawdown percentage
+    volatility: 12.3, // Volatility percentage
+    returnToRisk: 3.45, // Return to risk ratio
+    winRate: 68, // Win rate percentage
+    positions: 12, // Number of positions
+    avgTradeTime: 3.2, // Average trade time in days
+    annualizedReturn: 38.6, // Annualized return percentage
+    calmarRatio: 4.7, // Calmar ratio
+    sortinoRatio: 2.12, // Sortino ratio
+    averageWin: 5.2, // Average win percentage
+    averageLoss: -2.1, // Average loss percentage
+    profitFactor: 2.48, // Profit factor
+    recoveryFactor: 5.18, // Recovery factor
+    expectancy: 2.68, // Expectancy
+    dailyTurnover: 18.3 // Daily turnover percentage
   },
   { 
     id: 2, 
@@ -52,7 +70,25 @@ const mockProjects = [
     pnl: [2, -1, -3, 4, 5, 6, 1, 0, -2, 3], 
     status: 'paused',
     tScore: 62,
-    cumulativePnl: 15.3
+    cumulativePnl: 15.3,
+    investmentAmount: 75000, // Initial investment in USD
+    currentValue: 86475, // Current portfolio value
+    returns: 15.3, // Return percentage
+    maxDrawdown: 12.7, // Maximum drawdown percentage
+    volatility: 18.5, // Volatility percentage
+    returnToRisk: 0.83, // Return to risk ratio
+    winRate: 52, // Win rate percentage
+    positions: 8, // Number of positions
+    avgTradeTime: 4.6, // Average trade time in days
+    annualizedReturn: 14.2, // Annualized return percentage
+    calmarRatio: 1.12, // Calmar ratio
+    sortinoRatio: 0.89, // Sortino ratio
+    averageWin: 4.1, // Average win percentage
+    averageLoss: -2.8, // Average loss percentage
+    profitFactor: 1.46, // Profit factor
+    recoveryFactor: 1.20, // Recovery factor
+    expectancy: 0.63, // Expectancy
+    dailyTurnover: 9.7 // Daily turnover percentage
   },
   { 
     id: 3, 
@@ -61,7 +97,25 @@ const mockProjects = [
     pnl: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
     status: 'idle',
     tScore: 0,
-    cumulativePnl: 0
+    cumulativePnl: 0,
+    investmentAmount: 50000, // Initial investment in USD
+    currentValue: 50000, // Current portfolio value
+    returns: 0, // Return percentage
+    maxDrawdown: 0, // Maximum drawdown percentage
+    volatility: 0, // Volatility percentage
+    returnToRisk: 0, // Return to risk ratio
+    winRate: 0, // Win rate percentage
+    positions: 0, // Number of positions
+    avgTradeTime: 0, // Average trade time in days
+    annualizedReturn: 0, // Annualized return percentage
+    calmarRatio: 0, // Calmar ratio
+    sortinoRatio: 0, // Sortino ratio
+    averageWin: 0, // Average win percentage
+    averageLoss: 0, // Average loss percentage
+    profitFactor: 0, // Profit factor
+    recoveryFactor: 0, // Recovery factor
+    expectancy: 0, // Expectancy
+    dailyTurnover: 0 // Daily turnover percentage
   }
 ];
 

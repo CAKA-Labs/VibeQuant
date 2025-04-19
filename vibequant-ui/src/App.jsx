@@ -12,6 +12,7 @@ function App() {
       <div className="app-container">
         <Routes>
           <Route path="/" element={<ProjectsList />} />
+          <Route path="/projects" element={<ProjectsList />} />
           <Route path="/project/:projectId" element={<PipelineView />} />
         </Routes>
       </div>
