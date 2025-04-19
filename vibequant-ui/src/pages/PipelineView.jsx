@@ -6,6 +6,7 @@ import { DataModule } from '../components/pipeline/DataModule';
 import { FactorModule } from '../components/pipeline/FactorModule';
 import { StrategyModule } from '../components/pipeline/StrategyModule';
 import { BacktestModule } from '../components/pipeline/BacktestModule';
+import { LiveModule } from '../components/pipeline/LiveModule';
 import '../components/pipeline/pipeline.css';
 
 // Material Design风格的图标组件
@@ -43,7 +44,7 @@ const LiveIcon = () => (
 const mockProjects = [
   { 
     id: 1, 
-    name: 'Alpha 策略', 
+    name: '动量反转策略', 
     lastBacktest: '2025-04-15', 
     pnl: [5, 8, -2, 3, 7, 9, 3, -1, 4, 6], 
     status: 'live',
@@ -59,18 +60,16 @@ const mockProjects = [
     positions: 12, // Number of positions
     avgTradeTime: 3.2, // Average trade time in days
     annualizedReturn: 38.6, // Annualized return percentage
-    calmarRatio: 4.7, // Calmar ratio
-    sortinoRatio: 2.12, // Sortino ratio
-    averageWin: 5.2, // Average win percentage
-    averageLoss: -2.1, // Average loss percentage
-    profitFactor: 2.48, // Profit factor
+    averageWin: 5.8, // Average win percentage
+    averageLoss: -1.8, // Average loss percentage
+    profitFactor: 3.22, // Profit factor
     recoveryFactor: 5.18, // Recovery factor
     expectancy: 2.68, // Expectancy
     dailyTurnover: 18.3 // Daily turnover percentage
   },
   { 
     id: 2, 
-    name: 'Beta 动量', 
+    name: '趋势跟踪策略', 
     lastBacktest: '2025-04-10', 
     pnl: [2, -1, -3, 4, 5, 6, 1, 0, -2, 3], 
     status: 'paused',
@@ -85,9 +84,7 @@ const mockProjects = [
     winRate: 52, // Win rate percentage
     positions: 8, // Number of positions
     avgTradeTime: 4.6, // Average trade time in days
-    annualizedReturn: 14.2, // Annualized return percentage
-    calmarRatio: 1.12, // Calmar ratio
-    sortinoRatio: 0.89, // Sortino ratio
+    annualizedReturn: 14.5, // Annualized return percentage
     averageWin: 4.1, // Average win percentage
     averageLoss: -2.8, // Average loss percentage
     profitFactor: 1.46, // Profit factor
@@ -97,7 +94,7 @@ const mockProjects = [
   },
   { 
     id: 3, 
-    name: 'Gamma 因子', 
+    name: '多因子选股策略', 
     lastBacktest: '2025-03-28', 
     pnl: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
     status: 'idle',
@@ -113,8 +110,6 @@ const mockProjects = [
     positions: 0, // Number of positions
     avgTradeTime: 0, // Average trade time in days
     annualizedReturn: 0, // Annualized return percentage
-    calmarRatio: 0, // Calmar ratio
-    sortinoRatio: 0, // Sortino ratio
     averageWin: 0, // Average win percentage
     averageLoss: 0, // Average loss percentage
     profitFactor: 0, // Profit factor
@@ -204,12 +199,13 @@ function PipelineView() {
       case 'backtest':
         return <BacktestModule />;
       case 'live':
-        return <div className="module-content live-module">
-          <h2>Live Module</h2>
-          <p>This is the Live module content.</p>
-        </div>;
+        return <LiveModule />;
       default:
-        return <div>Select a module</div>;
+        return (
+          <div className="empty-state">
+            <p>请选择一个模块开始操作</p>
+          </div>
+        );
     }
   };
 

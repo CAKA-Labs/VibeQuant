@@ -3,9 +3,11 @@ import './pipeline.css';
 
 // 模拟数据
 const initialDataSources = [
-  { id: 1, name: '股票日线数据', type: 'market_data', config: { symbols: ['AAPL', 'GOOGL', 'MSFT'], timeframe: 'daily' }, status: 'connected' },
-  { id: 2, name: '股票财务数据', type: 'fundamental', config: { dataPoints: ['eps', 'revenue', 'pe_ratio'], updateFrequency: 'quarterly' }, status: 'connected' },
-  { id: 3, name: '舆情数据', type: 'alternative', config: { source: 'social_media', metrics: ['sentiment', 'volume'] }, status: 'disconnected' }
+  { id: 1, name: '股票分钟级行情', type: 'market_data', config: { symbols: ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'NVDA', 'TSLA'], timeframe: 'minute' }, status: 'connected' },
+  { id: 2, name: '宏观经济指标', type: 'fundamental', config: { dataPoints: ['gdp', 'inflation_rate', 'interest_rates', 'unemployment'], updateFrequency: 'monthly' }, status: 'connected' },
+  { id: 3, name: '交易量分析', type: 'market_data', config: { metrics: ['volume', 'turnover', 'vwap'], timeframe: 'daily' }, status: 'connected' },
+  { id: 4, name: '波动率指标', type: 'market_data', config: { metrics: ['historical_volatility', 'implied_volatility', 'vix'], timeframe: 'daily' }, status: 'connected' },
+  { id: 5, name: '社交媒体情绪', type: 'alternative', config: { source: 'social_media', metrics: ['sentiment', 'volume', 'topic_analysis'] }, status: 'disconnected' }
 ];
 
 // 模拟全局状态

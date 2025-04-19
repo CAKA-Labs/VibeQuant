@@ -3,9 +3,11 @@ import './pipeline.css';
 
 // 模拟初始数据
 const initialFactors = [
-  { id: 1, name: "动量反转", code: "def calculate(data):\n    return data['close'].pct_change(20)", metrics: { sharpe: 1.2, ir: 0.8, drawdown: -0.15 }, status: "active" },
-  { id: 2, name: "均值回归", code: "def calculate(data):\n    ma = data['close'].rolling(20).mean()\n    return (data['close'] - ma) / ma", metrics: { sharpe: 0.9, ir: 0.6, drawdown: -0.12 }, status: "testing" },
-  { id: 3, name: "波动率因子", code: "def calculate(data):\n    return data['close'].rolling(30).std()", metrics: { sharpe: 0.7, ir: 0.5, drawdown: -0.10 }, status: "inactive" }
+  { id: 1, name: "短期动量因子", code: "def calculate(data):\n    # 计算20日短期动量\n    return data['close'].pct_change(20)", metrics: { sharpe: 1.2, ir: 0.8, drawdown: -0.15 }, status: "active" },
+  { id: 2, name: "价格反转因子", code: "def calculate(data):\n    # 计算价格与20日均线的偏离度\n    ma = data['close'].rolling(20).mean()\n    return (data['close'] - ma) / ma", metrics: { sharpe: 0.9, ir: 0.6, drawdown: -0.12 }, status: "active" },
+  { id: 3, name: "交易量变化", code: "def calculate(data):\n    # 计算5日交易量变化率\n    return data['volume'].pct_change(5)", metrics: { sharpe: 0.65, ir: 0.4, drawdown: -0.08 }, status: "active" },
+  { id: 4, name: "波动率预测", code: "def calculate(data):\n    # 计算30日历史波动率\n    return data['close'].rolling(30).std()", metrics: { sharpe: 0.7, ir: 0.5, drawdown: -0.10 }, status: "active" },
+  { id: 5, name: "趋势强度指标", code: "def calculate(data):\n    # 计算ADX趋势强度指标\n    high = data['high']\n    low = data['low']\n    close = data['close']\n    # 这里是ADX的简化计算\n    tr = np.maximum(high - low, np.abs(high - close.shift(1)), np.abs(low - close.shift(1)))\n    atr = tr.rolling(14).mean()\n    return atr / close * 100", metrics: { sharpe: 1.1, ir: 0.75, drawdown: -0.14 }, status: "active" }
 ];
 
 // 全局状态

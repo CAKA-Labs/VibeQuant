@@ -3,45 +3,45 @@ import React, { useState, useEffect, useRef } from 'react';
 // 模拟工具调用返回内容，包括延迟时间和返回结果
 const mockToolCalls = {
   // 数据模块工具
-  FIND_SENTIMENT_DATA: {
+  FIND_MARKET_DATA: {
     delay: 1200,
-    response: '已找到以下情绪数据源：\n1. Twitter情绪API (情绪分析精度: 78%)\n2. 新闻头条情绪指标 (更新频率: 每日)\n3. Reddit讨论情绪指数 (覆盖资产: 主要加密货币和股票)'
+    response: '已找到以下市场数据源：\n1. 股票分钟级行情 (更新频率: 分钟级)\n2. 交易量分析数据 (更新频率: 每日)\n3. 波动率指标 (更新频率: 每日)\n4. 宏观经济指标 (更新频率: 月度)'
   },
-  CONFIG_SENTIMENT_DATA: {
+  CONFIG_MARKET_DATA: {
     delay: 800,
-    response: '已将Twitter情绪API配置为主要情绪数据源，包含以下情绪类别：积极、消极、中性'
+    response: '已配置股票分钟级行情作为主要数据源，包含以下资产: AAPL, MSFT, GOOGL, AMZN, META, NVDA, TSLA'
   },
-  FIND_VOLUME_DATA: {
+  FIND_MOMENTUM_DATA: {
     delay: 1000,
-    response: '已找到以下交易量数据源：\n1. Alpha Vantage API (分钟级交易量数据)\n2. Yahoo Finance (日级交易量数据)\n3. Binance 实时交易量流 (秒级数据，仅加密货币)'
+    response: '已找到以下动量数据：\n1. 价格动量数据 (20/50/200日)\n2. 相对强弱指标 (RSI)\n3. 成交量加权平均价格 (VWAP)'
   },
-  CONFIG_VOLUME_DATA: {
+  CONFIG_MOMENTUM_DATA: {
     delay: 800,
-    response: '已将Alpha Vantage API配置为交易量数据源，时间粒度设置为：10分钟'
+    response: '已将价格动量数据配置为动量反转策略的输入数据源，时间周期设置为：20日/50日'
   },
   
   // 因子模块工具
-  CREATE_SENTIMENT_FACTOR: {
+  CREATE_MOMENTUM_FACTOR: {
     delay: 1500,
-    response: '创建情绪动量因子：\n```python\ndef sentiment_momentum(data, window=5):\n    # 计算情绪变化率\n    sentiment_change = data[\'sentiment_score\'].pct_change(window)\n    # 计算情绪加速度\n    sentiment_accel = sentiment_change.diff()\n    # 归一化处理\n    return (sentiment_change * 0.7 + sentiment_accel * 0.3).rank(pct=True)\n```'
+    response: '创建短期动量因子：\n```python\ndef short_term_momentum(data, window=20):\n    # 计算价格变化率\n    price_change = data[\'close\'].pct_change(window)\n    # 计算动量指标\n    return price_change.rank(pct=True)\n```'
   },
-  CREATE_VOLUME_FACTOR: {
+  CREATE_REVERSAL_FACTOR: {
     delay: 1800,
-    response: '创建异常交易量因子：\n```python\ndef abnormal_volume(data, window=20):\n    # 计算交易量移动平均\n    volume_ma = data[\'volume\'].rolling(window).mean()\n    # 计算当前交易量偏离度\n    volume_dev = data[\'volume\'] / volume_ma - 1\n    # 交易量突增信号\n    return volume_dev.rank(pct=True)\n```'
+    response: '创建价格反转因子：\n```python\ndef price_reversal(data, window=20):\n    # 计算均线偏离度\n    ma = data[\'close\'].rolling(window).mean()\n    deviation = (data[\'close\'] - ma) / ma\n    # 反转信号：价格过度偏离均线时可能出现反转\n    return -deviation.rank(pct=True)\n```'
   },
   TEST_FACTORS: {
     delay: 2200,
-    response: '因子测试结果：\n- 情绪动量因子：IC值0.12，IR值1.38，年化收益8.6%\n- 异常交易量因子：IC值0.08，IR值0.94，年化收益6.2%\n- 因子相关性：0.22 (低相关，适合组合)'
+    response: '因子测试结果：\n- 短期动量因子：IC值0.15，IR值1.62，年化收益9.8%\n- 价格反转因子：IC值0.12，IR值1.33，年化收益7.5%\n- 因子相关性：-0.28 (负相关，非常适合组合)'
   },
   
   // 策略模块工具
   CREATE_STRATEGY: {
     delay: 2500,
-    response: '创建策略代码：\n```python\nclass SentimentVolumeStrategy(Strategy):\n    def __init__(self):\n        self.sentiment_weight = 0.6  # 情绪因子权重\n        self.volume_weight = 0.4     # 交易量因子权重\n        \n    def generate_signals(self, factors_data):\n        # 组合因子\n        combined_factor = (factors_data[\'sentiment_momentum\'] * self.sentiment_weight + \n                          factors_data[\'abnormal_volume\'] * self.volume_weight)\n        \n        # 生成交易信号\n        long_signals = combined_factor > 0.8  # 选择排名前20%的资产做多\n        short_signals = combined_factor < 0.2  # 选择排名后20%的资产做空\n        \n        return {\'long\': long_signals, \'short\': short_signals}\n```'
+    response: '创建动量反转策略代码：\n```python\nclass MomentumReversalStrategy(Strategy):\n    def __init__(self):\n        self.momentum_weight = 0.5  # 动量因子权重\n        self.reversal_weight = 0.5  # 反转因子权重\n        \n    def generate_signals(self, factors_data):\n        # 组合因子\n        combined_factor = (factors_data[\'short_term_momentum\'] * self.momentum_weight + \n                          factors_data[\'price_reversal\'] * self.reversal_weight)\n        \n        # 生成交易信号\n        long_signals = combined_factor > 0.8  # 选择排名前20%的资产做多\n        short_signals = combined_factor < 0.2  # 选择排名后20%的资产做空\n        \n        return {\'long\': long_signals, \'short\': short_signals}\n```'
   },
   SET_RISK_PARAMS: {
     delay: 1400,
-    response: '设置风险参数：\n- 最大持仓比例：单一资产不超过组合的10%\n- 最大杠杆倍数：1.5倍\n- 止损设置：单笔亏损不超过2%\n- 波动率控制：投资组合波动率目标13%'
+    response: '设置风险参数：\n- 最大持仓比例：单一资产不超过组合的12%\n- 最大杠杆倍数：1.0倍\n- 止损设置：单笔亏损不超过3%\n- 波动率控制：投资组合波动率目标12%'
   },
   
   // 回测模块工具
@@ -61,45 +61,45 @@ const mockToolCalls = {
   },
   BACKTEST_RESULTS: {
     delay: 2000,
-    response: '回测结果摘要：\n- 年化收益：18.2%\n- 最大回撤：8.7%\n- 夏普比率：1.75\n- 卡玛比率：2.09\n- 胜率：64.3%\n- 盈亏比：2.1\n- 年化波动率：10.4%'
+    response: '回测结果摘要：\n- 年化收益：38.6%\n- 最大回撤：8.2%\n- 夏普比率：1.86\n- 卡玛比率：4.70\n- 胜率：68%\n- 盈亏比：3.22\n- 年化波动率：12.3%'
   },
   GENERATE_REPORT: {
     delay: 1500,
-    response: '已生成详细回测报告，关键发现：\n1. 策略在市场波动性大的时期表现更好\n2. 情绪因子对收益贡献率约72%\n3. 交易量因子主要帮助降低回撤\n4. 最优的参数组合是情绪权重0.65，交易量权重0.35'
+    response: '已生成策略报告PDF，内容包括：\n- 策略概述与逻辑说明\n- 因子贡献度分析\n- 回测结果详情与图表\n- 不同市场环境下的表现\n- 风险指标分析\n- 优化建议'
   },
   
   // 实盘模块工具
   CONFIG_LIVE: {
     delay: 1800,
-    response: '配置实盘参数：\n- 初始资金：100万美元\n- 交易频率：10分钟\n- 资产列表：已配置10支高流动性股票\n- 风控设置：单日最大亏损限制3%'
+    response: '配置实盘参数：\n- 初始资金：100万美元\n- 交易频率：日级\n- 资产列表：已配置12支高流动性股票\n- 风控设置：单日最大亏损限制5%'
   },
   DEPLOY_STRATEGY: {
     delay: 2500,
     response: '策略部署进度：正在初始化交易环境...',
     updates: [
       { delay: 800, message: '策略部署进度：加载策略配置...' },
-      { delay: 800, message: '策略部署进度：连接数据源...' },
-      { delay: 800, message: '策略部署进度：设置风控模块...' },
-      { delay: 800, message: '策略部署进度：策略已成功部署！' }
+      { delay: 800, message: '策略部署进度：准备交易账户...' },
+      { delay: 800, message: '策略部署进度：设置风控参数...' },
+      { delay: 800, message: '策略部署进度：完成！已成功部署动量反转策略' }
     ]
   },
   LIVE_STATUS: {
     delay: 1200,
-    response: '实盘状态：\n- 策略ID：SV-20250420-001\n- 运行状态：已激活\n- 首次交易时间：下一个交易时段（2025-04-21 09:30）\n- 监控面板：已配置，包含实时收益、持仓和信号监控'
+    response: '实盘状态：\n- 策略ID：MR-20250420-001\n- 运行状态：已激活\n- 首次交易时间：下一个交易时段（2025-04-21 09:30）\n- 监控面板：已配置，包含实时收益、持仓和信号监控'
   }
 };
 
 // 工具与pipeline模块的映射关系
 const toolModuleMapping = {
   // 数据模块工具
-  FIND_SENTIMENT_DATA: 'data',
-  CONFIG_SENTIMENT_DATA: 'data',
-  FIND_VOLUME_DATA: 'data',
-  CONFIG_VOLUME_DATA: 'data',
+  FIND_MARKET_DATA: 'data',
+  CONFIG_MARKET_DATA: 'data',
+  FIND_MOMENTUM_DATA: 'data',
+  CONFIG_MOMENTUM_DATA: 'data',
   
   // 因子模块工具
-  CREATE_SENTIMENT_FACTOR: 'factor',
-  CREATE_VOLUME_FACTOR: 'factor',
+  CREATE_MOMENTUM_FACTOR: 'factor',
+  CREATE_REVERSAL_FACTOR: 'factor',
   TEST_FACTORS: 'factor',
   
   // 策略模块工具
@@ -122,97 +122,85 @@ const toolModuleMapping = {
 const autoAgentFlow = [
   { 
     sender: 'agent',
-    message: '我将为您构建一个基于情绪和交易量组合的量化策略。首先，我需要查找合适的情绪数据源。',
-    toolCall: 'FIND_SENTIMENT_DATA'
+    message: '我将为您构建一个动量反转策略。首先，我需要查找合适的市场数据。',
+    toolCall: 'FIND_MARKET_DATA'
   },
   { 
     sender: 'agent',
-    message: '我将使用Twitter情绪API作为主要情绪数据源，现在配置数据接入。', 
-    toolCall: 'CONFIG_SENTIMENT_DATA'
+    message: '已找到可用的市场数据源。我将使用股票分钟级行情作为主要数据源。',
+    toolCall: 'CONFIG_MARKET_DATA'
   },
   { 
     sender: 'agent',
-    message: '接下来，我需要查找合适的交易量数据。', 
-    toolCall: 'FIND_VOLUME_DATA'
+    message: '接下来，我需要找到适合动量和反转分析的特定数据。',
+    toolCall: 'FIND_MOMENTUM_DATA'
   },
   { 
     sender: 'agent',
-    message: '我将使用Alpha Vantage API获取10分钟级别的交易量数据，现在配置数据接入。', 
-    toolCall: 'CONFIG_VOLUME_DATA'
+    message: '我已配置了动量数据，现在开始创建策略所需的因子。首先是短期动量因子...',
+    toolCall: 'CREATE_MOMENTUM_FACTOR'
   },
   { 
     sender: 'agent',
-    message: '数据源已配置完成。现在开始设计情绪因子...', 
-    toolCall: 'CREATE_SENTIMENT_FACTOR'
+    message: '短期动量因子已创建。接下来创建价格反转因子...',
+    toolCall: 'CREATE_REVERSAL_FACTOR'
   },
   { 
     sender: 'agent',
-    message: '情绪动量因子已创建。接下来设计交易量因子...', 
-    toolCall: 'CREATE_VOLUME_FACTOR'
-  },
-  { 
-    sender: 'agent',
-    message: '两个因子已创建完成，现在进行因子测试评估它们的预测能力...', 
+    message: '两个因子都已创建，现在进行因子测试，评估它们的预测能力...',
     toolCall: 'TEST_FACTORS'
   },
   { 
     sender: 'agent',
-    message: '因子测试结果表明两个因子都具有预测能力且相关性较低，适合组合。现在开始构建策略...', 
+    message: '因子测试结果表明短期动量因子和价格反转因子都具有较好的预测能力，且相关性为负，非常适合组合。现在开始构建策略...',
     toolCall: 'CREATE_STRATEGY'
   },
   { 
     sender: 'agent',
-    message: '策略代码已创建，现在设置风险控制参数...', 
+    message: '策略代码已创建，现在设置风险控制参数...',
     toolCall: 'SET_RISK_PARAMS'
   },
   { 
     sender: 'agent',
-    message: '策略已完成配置。接下来设置回测参数评估策略表现...', 
+    message: '策略已完成配置。接下来设置回测参数评估策略表现...',
     toolCall: 'CONFIG_BACKTEST'
   },
   { 
     sender: 'agent',
-    message: '回测参数已设置，开始运行回测...', 
+    message: '回测参数已配置，现在启动回测...',
     toolCall: 'RUN_BACKTEST'
   },
   { 
     sender: 'agent',
-    message: '回测完成，以下是回测结果摘要：', 
+    message: '回测完成，以下是回测结果摘要：',
     toolCall: 'BACKTEST_RESULTS'
   },
   { 
     sender: 'agent',
-    message: '生成详细的回测分析报告...', 
+    message: '回测结果显示策略表现优异，年化收益率38.6%，夏普比率1.86。我将为您生成详细报告...',
     toolCall: 'GENERATE_REPORT'
   },
   { 
     sender: 'agent',
-    message: '回测结果显示策略表现良好。是否要部署到实盘环境？',
-    toolCall: null,
-    waitForUserResponse: true,
-    userResponseOptions: ["是", "否", "稍后再说"]
-  },
-  { 
-    sender: 'agent',
-    message: '正在配置实盘参数...', 
+    message: '策略报告已生成。根据回测结果，建议将此策略部署到实盘环境。现在开始配置实盘参数...',
     toolCall: 'CONFIG_LIVE',
     requiresUserConfirmation: true
   },
   { 
     sender: 'agent',
-    message: '开始部署策略到实盘环境...', 
+    message: '实盘参数已配置。是否确认部署动量反转策略到实盘环境？',
     toolCall: 'DEPLOY_STRATEGY',
     requiresUserConfirmation: true
   },
   { 
     sender: 'agent',
-    message: '策略已成功部署，以下是实盘状态信息：', 
+    message: '策略已成功部署，以下是实盘状态信息：',
     toolCall: 'LIVE_STATUS',
     requiresUserConfirmation: true
   },
   { 
     sender: 'agent',
-    message: '恭喜！基于情绪和交易量组合的量化策略已成功创建并部署到实盘环境。您可以通过监控面板实时查看策略表现。您还需要我做什么？', 
+    message: '恭喜！动量反转策略已成功创建并部署到实盘环境。您可以通过监控面板实时查看策略表现。您还需要我做什么？',
     toolCall: null
   }
 ];
@@ -255,7 +243,7 @@ function AutoAgentChatPanel({ initialMessages = [], onSendMessage, selectedNode 
   // 自动开始演示流程的函数
   const startAutoFlow = () => {
     // 添加默认的用户消息
-    const defaultPrompt = "为我构建一个基于情绪和交易量组合的量化策略";
+    const defaultPrompt = "为我构建一个动量反转策略";
     const userMessage = { sender: 'user', message: defaultPrompt };
     setMessages(prev => [...prev, userMessage]);
     
@@ -278,7 +266,7 @@ function AutoAgentChatPanel({ initialMessages = [], onSendMessage, selectedNode 
     if ((autoFlowRunning && !userConfirmationNeeded) || isTyping) return;
     
     // 检查是否是特定的启动命令，或在没有输入时使用默认命令
-    const inputText = chatInput.trim() || "为我构建一个基于情绪和交易量组合的量化策略";
+    const inputText = chatInput.trim() || "为我构建一个动量反转策略";
     
     // 添加用户消息
     const userMessage = { sender: 'user', message: inputText };
@@ -372,12 +360,6 @@ function AutoAgentChatPanel({ initialMessages = [], onSendMessage, selectedNode 
         return;
       }
 
-      // 如果等待用户响应，停下来
-      if (currentStep.waitForUserResponse) {
-        setIsTyping(false);
-        return;
-      }
-
       setIsTyping(true);
 
       // 添加代理消息
@@ -465,7 +447,7 @@ function AutoAgentChatPanel({ initialMessages = [], onSendMessage, selectedNode 
           {messages.length === 0 && (
             <div className="bento-welcome-message">
               <p>您好！我是VibeQuant Assistant，可以帮助您构建、优化和监控量化交易策略。</p>
-              <p>请输入<strong>"为我构建一个基于情绪和交易量组合的量化策略"</strong>来开始自动智能体演示。</p>
+              <p>请输入<strong>"为我构建一个动量反转策略"</strong>来开始自动智能体演示。</p>
             </div>
           )}
           

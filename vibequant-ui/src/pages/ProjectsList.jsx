@@ -6,7 +6,7 @@ import PortfolioDashboard from '../components/PortfolioDashboard'
 const mockProjects = [
   { 
     id: 1, 
-    name: 'Alpha 策略', 
+    name: '动量反转策略', 
     lastBacktest: '2025-04-15', 
     pnl: [5, 8, -2, 3, 7, 9, 3, -1, 4, 6, 2, 5, -1, 3, 6, 8, 4, 1, 5, 7, 3, 9, -2, 4, 6, 8, 5, 2, 4, 7], // 30 data points
     status: 'live',
@@ -22,7 +22,7 @@ const mockProjects = [
   },
   { 
     id: 2, 
-    name: 'Beta 动量', 
+    name: '趋势跟踪策略', 
     lastBacktest: '2025-04-10', 
     pnl: [2, -1, -3, 4, 5, 6, 1, 0, -2, 3, 1, 4, -1, 2, 5, 4, 2, 1, 3, 6, 0, -1, 2, 4, 3, 1, 2, 5, -1, 0], // 30 data points
     status: 'paused',
@@ -38,7 +38,7 @@ const mockProjects = [
   },
   { 
     id: 3, 
-    name: 'Gamma 因子', 
+    name: '多因子选股策略', 
     lastBacktest: '2025-03-28', 
     pnl: [0, 1, 0, -1, 1, 0, 0, 1, 0, -1, 0, 0, 1, 0, 0, 0, -1, 0, 1, 0, 0, 0, 1, 0, -1, 0, 0, 1, 0, 0], // 30 data points
     status: 'idle',
@@ -54,7 +54,7 @@ const mockProjects = [
   },
   { 
     id: 4, 
-    name: 'Delta 反转', 
+    name: '高频统计套利', 
     lastBacktest: '2025-04-18', 
     pnl: [7, 5, 8, 9, 6, 10, 8, 7, 9, 11, 6, 8, 5, 9, 10, 12, 9, 8, 10, 11, 7, 9, 6, 10, 11, 13, 10, 8, 11, 12], // 30 data points
     status: 'live',
@@ -70,7 +70,7 @@ const mockProjects = [
   },
   { 
     id: 5, 
-    name: '波动率趋势', 
+    name: '波动率交易策略', 
     lastBacktest: '2025-04-01', 
     pnl: [-3, -1, 0, -2, 1, -1, 0, -2, -1, 0, 1, -1, -2, 0, -1, -3, 0, -1, -2, 1, -1, 0, -2, -1, 0, 1, -1, -2, 0, -1], // 30 data points
     status: 'idle',
