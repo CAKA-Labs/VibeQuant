@@ -174,88 +174,58 @@ function ProjectsList() {
         {/* Portfolio Dashboard integration */}
         <PortfolioDashboard />
         
-        <h2 className="section-title">Strategy Projects</h2>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
-          <input
-            type="search"
-            placeholder="Search projects..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ 
-              padding: '8px 12px', 
-              border: '1px solid var(--border-subtle)', 
-              borderRadius: 'var(--medium-border-radius)',
-              width: '280px'
-            }}
-          />
+        <div className="project-grid">
+          {filteredProjects.map(project => (
+            <Link to={`/project/${project.id}`} key={project.id} className="project-card">
+              <div className="project-card-header">
+                <span className="project-card-title">{project.name}</span>
+                <span className={`project-card-status ${project.status}`}>
+                  <span className="status-indicator"></span>
+                  {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+                </span>
+              </div>
+              <div className="project-card-body">
+                <div className="project-metrics-grid">
+                  <div className="project-card-metric">
+                    <span className="metric-label">Investment</span>
+                    <span className="metric-value">${project.investmentAmount.toLocaleString()}</span>
+                  </div>
+                  <div className="project-card-metric">
+                    <span className="metric-label">Return</span>
+                    <span className={`metric-value ${project.returns >= 0 ? 'positive' : 'negative'}`}>
+                      {project.returns >= 0 ? '+' : ''}{project.returns.toFixed(2)}%
+                    </span>
+                  </div>
+                  <div className="project-card-metric">
+                    <span className="metric-label">Sharpe</span>
+                    <span className="metric-value">{project.sharpe.toFixed(2)}</span>
+                  </div>
+                  <div className="project-card-metric">
+                    <span className="metric-label">Max DD</span>
+                    <span className="metric-value">-{project.maxDrawdown.toFixed(1)}%</span>
+                  </div>
+                  <div className="project-card-metric">
+                    <span className="metric-label">Volatility</span>
+                    <span className="metric-value">{project.volatility.toFixed(1)}%</span>
+                  </div>
+                  <div className="project-card-metric">
+                    <span className="metric-label">Win Rate</span>
+                    <span className="metric-value">{project.winRate}%</span>
+                  </div>
+                </div>
+                <div className="project-card-sparkline">
+                  <Sparkline data={project.pnl} width={240} height={30}/>
+                </div>
+                <div className="project-card-subtitle">
+                  Last Backtest: <strong>{project.lastBacktest}</strong> • Positions: <strong>{project.positions}</strong>
+                </div>
+              </div>
+              <div className="project-card-actions">
+                 <button className="btn">⋯</button> {/* More actions placeholder */}
+              </div>
+            </Link>
+          ))}
         </div>
-
-        {filteredProjects.length > 0 ? (
-          <div className="project-grid">
-            {filteredProjects.map(project => (
-              <Link to={`/project/${project.id}`} key={project.id} className="project-card">
-                <div className="project-card-header">
-                  <span className="project-card-title">{project.name}</span>
-                  <span className={`project-card-status ${project.status}`}>
-                    <span className="status-indicator"></span>
-                    {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-                  </span>
-                </div>
-                <div className="project-card-body">
-                  <div className="project-metrics-grid">
-                    <div className="project-card-metric">
-                      <span className="metric-label">Investment</span>
-                      <span className="metric-value">${project.investmentAmount.toLocaleString()}</span>
-                    </div>
-                    <div className="project-card-metric">
-                      <span className="metric-label">Return</span>
-                      <span className={`metric-value ${project.returns >= 0 ? 'positive' : 'negative'}`}>
-                        {project.returns >= 0 ? '+' : ''}{project.returns.toFixed(2)}%
-                      </span>
-                    </div>
-                    <div className="project-card-metric">
-                      <span className="metric-label">Sharpe</span>
-                      <span className="metric-value">{project.sharpe.toFixed(2)}</span>
-                    </div>
-                    <div className="project-card-metric">
-                      <span className="metric-label">Max DD</span>
-                      <span className="metric-value">-{project.maxDrawdown.toFixed(1)}%</span>
-                    </div>
-                    <div className="project-card-metric">
-                      <span className="metric-label">Volatility</span>
-                      <span className="metric-value">{project.volatility.toFixed(1)}%</span>
-                    </div>
-                    <div className="project-card-metric">
-                      <span className="metric-label">Win Rate</span>
-                      <span className="metric-value">{project.winRate}%</span>
-                    </div>
-                  </div>
-                  <div className="project-card-sparkline">
-                    <Sparkline data={project.pnl} width={240} height={30}/>
-                  </div>
-                  <div className="project-card-subtitle">
-                    Last Backtest: <strong>{project.lastBacktest}</strong> • Positions: <strong>{project.positions}</strong>
-                  </div>
-                </div>
-                <div className="project-card-actions">
-                   <button className="btn">⋯</button> {/* More actions placeholder */}
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="empty-state">
-            <div className="empty-state-icon">📊</div>
-            <h3 className="empty-state-title">No projects found</h3>
-            <p className="empty-state-desc">Create your first project to get started</p>
-            <button 
-              className="btn btn-primary" 
-              onClick={() => setShowNewProjectModal(true)}
-            >
-              <span className="btn-icon">+</span> New Project
-            </button>
-          </div>
-        )}
       </main>
 
       {/* New Project Modal */}
