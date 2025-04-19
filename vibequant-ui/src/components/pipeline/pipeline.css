@@ -1178,3 +1178,372 @@ input:checked + .toggle-slider:before {
     flex-direction: column;
   }
 }
+
+/* 市场监控面板样式 */
+.market-monitor {
+  padding: 1rem 0;
+}
+
+.market-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.market-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.market-subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 1.5rem 0 1rem;
+  color: #333;
+}
+
+.market-time {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.market-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.market-status.open {
+  background-color: rgba(10, 186, 181, 0.1);
+  color: #0abab5;
+}
+
+.market-status.closed {
+  background-color: rgba(136, 136, 136, 0.1);
+  color: #888;
+}
+
+.current-time {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.indices-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.index-card {
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.index-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.index-name {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.index-price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.index-change {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.index-volume {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.positions-realtime {
+  margin-top: 1.5rem;
+}
+
+/* 价格闪烁效果 */
+.tick-up {
+  background-color: rgba(10, 186, 181, 0.1);
+  animation: flash-green 1s ease;
+}
+
+.tick-down {
+  background-color: rgba(234, 67, 53, 0.1);
+  animation: flash-red 1s ease;
+}
+
+@keyframes flash-green {
+  0% { background-color: rgba(10, 186, 181, 0.3); }
+  100% { background-color: rgba(10, 186, 181, 0.05); }
+}
+
+@keyframes flash-red {
+  0% { background-color: rgba(234, 67, 53, 0.3); }
+  100% { background-color: rgba(234, 67, 53, 0.05); }
+}
+
+/* 交易提醒样式 */
+.alerts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.alerts-count {
+  background-color: #0abab5;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  padding: 0.1rem 0.5rem;
+  margin-left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+}
+
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.alert-item {
+  display: flex;
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  border-left: 3px solid #0abab5;
+}
+
+.alert-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.alert-item.triggered {
+  border-left-color: #ccc;
+  background-color: #f5f5f5;
+  opacity: 0.8;
+}
+
+.alert-icon {
+  color: #0abab5;
+  margin-right: 1rem;
+  display: flex;
+  align-items: flex-start;
+}
+
+.alert-item.triggered .alert-icon {
+  color: #888;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-title {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: #333;
+}
+
+.alert-condition {
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.alert-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.alert-time {
+  display: flex;
+  gap: 1rem;
+}
+
+.trigger-time {
+  color: #ffbf00;
+}
+
+.alert-status {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.alert-status-indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+}
+
+.alert-status-indicator.active {
+  background-color: #0abab5;
+  box-shadow: 0 0 0 2px rgba(10, 186, 181, 0.2);
+}
+
+.alert-status-indicator.triggered {
+  background-color: #ffbf00;
+  box-shadow: 0 0 0 2px rgba(255, 191, 0, 0.2);
+}
+
+.alert-actions {
+  margin-left: 1rem;
+}
+
+/* 交易助手样式 */
+.assistant-card {
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-left: 3px solid #0abab5;
+}
+
+.assistant-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.assistant-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: #0abab5;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+}
+
+.assistant-info h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.assistant-info p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.assistant-message {
+  padding: 0.75rem 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+.assistant-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.assistant-input-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.assistant-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.assistant-send-btn {
+  background-color: #0abab5;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.assistant-send-btn:hover {
+  background-color: #09a29e;
+}
+
+.assistant-feedback {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.assistant-feedback button {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.assistant-feedback button:hover {
+  color: #0abab5;
+}
+
+.assistant-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.quick-action-btn {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 9999px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-action-btn:hover {
+  background-color: #f0f0f0;
+  color: #0abab5;
+  border-color: #0abab5;
+}

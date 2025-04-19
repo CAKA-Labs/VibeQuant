@@ -133,7 +133,7 @@ function ProjectsList() {
     <div>
       <header className="app-header">
         <div className="app-logo">
-          <span className="brand-name">VibeQuant</span>
+          <img src="/vibe-quant.png" alt="VibeQuant" className="brand-logo" />
         </div>
         <Link to="/project/new" className="btn btn-primary">
           <span className="icon">+</span> 新建策略

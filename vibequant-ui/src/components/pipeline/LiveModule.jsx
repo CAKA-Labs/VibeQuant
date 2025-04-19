@@ -232,6 +232,12 @@ export function LiveModule() {
             概览
           </button>
           <button 
+            className={`toolbar-tab ${activeTab === 'market' ? 'active' : ''}`}
+            onClick={() => setActiveTab('market')}
+          >
+            市场行情
+          </button>
+          <button 
             className={`toolbar-tab ${activeTab === 'positions' ? 'active' : ''}`}
             onClick={() => setActiveTab('positions')}
             disabled={isCreating || !selectedTrading}
@@ -244,6 +250,12 @@ export function LiveModule() {
             disabled={isCreating || !selectedTrading}
           >
             交易记录
+          </button>
+          <button 
+            className={`toolbar-tab ${activeTab === 'assistant' ? 'active' : ''}`}
+            onClick={() => setActiveTab('assistant')}
+          >
+            交易助手
           </button>
           <button 
             className={`toolbar-tab ${activeTab === 'settings' ? 'active' : ''}`}
@@ -283,6 +295,13 @@ export function LiveModule() {
           />
         )}
         
+        {activeTab === 'market' && (
+          <MarketMonitor 
+            trading={selectedTrading}
+            currentTime={currentTime}
+          />
+        )}
+        
         {activeTab === 'positions' && selectedTrading && (
           <PositionsTable 
             positions={selectedTrading.positions}
@@ -296,6 +315,10 @@ export function LiveModule() {
             formatTime={formatTime}
             formatCurrency={formatCurrency}
           />
+        )}
+        
+        {activeTab === 'assistant' && (
+          <TradingAssistant trading={selectedTrading} />
         )}
         
         {activeTab === 'settings' && (
@@ -420,30 +443,30 @@ export function LiveModule() {
             )}
           </div>
         )}
-      </div>
-
-      {showSettingsModal && selectedTrading && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h3>交易设置</h3>
-              <button className="btn-icon" onClick={() => setShowSettingsModal(false)}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>
-            <div className="modal-body">
-              {/* 设置内容 */}
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={() => setShowSettingsModal(false)}>取消</button>
-              <button className="btn btn-primary">保存设置</button>
+        
+        {showSettingsModal && selectedTrading && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h3>交易设置</h3>
+                <button className="btn-icon" onClick={() => setShowSettingsModal(false)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+              <div className="modal-body">
+                {/* 设置内容 */}
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-secondary" onClick={() => setShowSettingsModal(false)}>取消</button>
+                <button className="btn btn-primary">保存设置</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
@@ -993,7 +1016,7 @@ function LiveTradingSettings({ isCreating, trading, onSave, onCancel }) {
       settings: {
         capital: 1000000,
         maxPositions: 20,
-        maxPositionSize: 20,
+        maxPositionSize: 20, // percentage of portfolio
         stopLoss: 8,
         takeProfit: 20,
         commissionRate: 0.0005,
@@ -1343,6 +1366,614 @@ function LiveTradingSettings({ isCreating, trading, onSave, onCancel }) {
             </button>
           </>
         )}
+      </div>
+    </div>
+  );
+}
+
+// 添加实时行情监控面板
+function MarketMonitor({ trading, currentTime }) {
+  const indices = [
+    { code: '000001', name: '上证指数', price: 3218.42, change: 0.68, volume: '3851亿' },
+    { code: '399001', name: '深证成指', price: 10523.67, change: 0.95, volume: '4127亿' },
+    { code: '000300', name: '沪深300', price: 4125.83, change: 0.74, volume: '2386亿' },
+    { code: '000016', name: '上证50', price: 2896.12, change: 0.52, volume: '953亿' },
+    { code: '399006', name: '创业板指', price: 2153.46, change: 1.24, volume: '1246亿' }
+  ];
+  
+  // 生成随机的实时价格变动
+  const [priceUpdates, setPriceUpdates] = useState({});
+  
+  useEffect(() => {
+    // 模拟价格小幅随机波动
+    const interval = setInterval(() => {
+      const updates = {};
+      
+      // 指数波动
+      indices.forEach(index => {
+        const change = (Math.random() - 0.5) * 0.05; // 小幅波动
+        updates[index.code] = {
+          price: index.price * (1 + change/100),
+          change: index.change + change
+        };
+      });
+      
+      // 持仓股票波动
+      if (trading && trading.positions) {
+        trading.positions.forEach(position => {
+          const change = (Math.random() - 0.45) * 0.08; // 小幅波动，略微偏向上涨
+          updates[position.symbol] = {
+            price: position.currentPrice * (1 + change/100),
+            change: position.pnl + change
+          };
+        });
+      }
+      
+      setPriceUpdates(prev => ({...prev, ...updates}));
+    }, 3000); // 每3秒更新一次
+    
+    return () => clearInterval(interval);
+  }, [trading]);
+  
+  // 获取股票最新价格
+  const getLatestPrice = (symbol, originalPrice) => {
+    if (priceUpdates[symbol]) {
+      return priceUpdates[symbol].price;
+    }
+    return originalPrice;
+  };
+  
+  // 获取股票最新涨跌幅
+  const getLatestChange = (symbol, originalChange) => {
+    if (priceUpdates[symbol]) {
+      return priceUpdates[symbol].change;
+    }
+    return originalChange;
+  };
+  
+  // 格式化涨跌幅
+  const formatChange = (value) => {
+    const sign = value >= 0 ? '+' : '';
+    return `${sign}${value.toFixed(2)}%`;
+  };
+  
+  // 判断是否是在交易时间内
+  const isMarketOpen = () => {
+    const now = currentTime;
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const day = now.getDay();
+    
+    // 周末市场关闭
+    if (day === 0 || day === 6) return false;
+    
+    // 上午时段: 9:30 - 11:30
+    const isMorningSession = (hour === 9 && minute >= 30) || (hour === 10) || (hour === 11 && minute <= 30);
+    
+    // 下午时段: 13:00 - 15:00
+    const isAfternoonSession = (hour >= 13 && hour < 15);
+    
+    return isMorningSession || isAfternoonSession;
+  };
+  
+  return (
+    <div className="fade-in market-monitor">
+      <div className="market-header">
+        <h4 className="market-title">市场概览</h4>
+        <div className="market-time">
+          <span className={`market-status ${isMarketOpen() ? 'open' : 'closed'}`}>
+            {isMarketOpen() ? '交易中' : '已收盘'}
+          </span>
+          <span className="current-time">{currentTime.toLocaleTimeString()}</span>
+        </div>
+      </div>
+      
+      <div className="indices-panel">
+        {indices.map(index => (
+          <div className="index-card" key={index.code}>
+            <div className="index-name">{index.name}</div>
+            <div className="index-price">
+              {getLatestPrice(index.code, index.price).toFixed(2)}
+            </div>
+            <div className={`index-change ${getLatestChange(index.code, index.change) >= 0 ? 'positive' : 'negative'}`}>
+              {formatChange(getLatestChange(index.code, index.change))}
+            </div>
+            <div className="index-volume">成交: {index.volume}</div>
+          </div>
+        ))}
+      </div>
+      
+      {trading && trading.positions && (
+        <div className="positions-realtime">
+          <h4 className="market-subtitle">持仓行情</h4>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>代码</th>
+                <th>名称</th>
+                <th>最新价</th>
+                <th>涨跌幅</th>
+                <th>持仓盈亏</th>
+                <th>成本</th>
+              </tr>
+            </thead>
+            <tbody>
+              {trading.positions.map(position => (
+                <tr key={position.symbol}>
+                  <td>{position.symbol}</td>
+                  <td>{position.name}</td>
+                  <td className={`${getLatestPrice(position.symbol, position.currentPrice) > position.currentPrice ? 'tick-up' : getLatestPrice(position.symbol, position.currentPrice) < position.currentPrice ? 'tick-down' : ''}`}>
+                    {getLatestPrice(position.symbol, position.currentPrice).toFixed(2)}
+                  </td>
+                  <td className={getLatestChange(position.symbol, position.pnl) >= 0 ? 'positive' : 'negative'}>
+                    {formatChange(getLatestChange(position.symbol, position.pnl))}
+                  </td>
+                  <td className={position.pnl >= 0 ? 'positive' : 'negative'}>
+                    {formatChange(position.pnl)}
+                  </td>
+                  <td>{position.costPrice.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// 交易提醒组件
+function TradeAlerts() {
+  const [alerts, setAlerts] = useState([
+    {
+      id: 1,
+      type: 'price_alert',
+      symbol: '600519',
+      name: '贵州茅台',
+      condition: '价格超过1850元',
+      createdAt: '2025-04-19 15:30:45',
+      status: 'active'
+    },
+    {
+      id: 2,
+      type: 'position_change',
+      symbol: '601318',
+      name: '中国平安',
+      condition: '持仓盈利超过5%',
+      createdAt: '2025-04-19 10:22:18',
+      status: 'triggered',
+      triggeredAt: '2025-04-20 09:45:22'
+    },
+    {
+      id: 3,
+      type: 'market_event',
+      condition: '沪深300下跌超过1%',
+      createdAt: '2025-04-18 14:37:52',
+      status: 'active'
+    },
+    {
+      id: 4,
+      type: 'custom',
+      condition: '日交易量超过200万',
+      createdAt: '2025-04-17 11:05:33',
+      status: 'active'
+    }
+  ]);
+  
+  const [newAlertOpen, setNewAlertOpen] = useState(false);
+  const [alertType, setAlertType] = useState('price_alert');
+  const [selectedSymbol, setSelectedSymbol] = useState('');
+  const [alertCondition, setAlertCondition] = useState('');
+  
+  // 获取未触发警报数量
+  const activeAlertsCount = alerts.filter(alert => alert.status === 'active').length;
+  
+  // 删除警报
+  const deleteAlert = (id) => {
+    if(window.confirm('确定要删除此提醒？')) {
+      setAlerts(alerts.filter(alert => alert.id !== id));
+    }
+  };
+  
+  // 添加新警报
+  const addNewAlert = () => {
+    if (!alertCondition) {
+      alert('请输入提醒条件');
+      return;
+    }
+    
+    const newAlert = {
+      id: Date.now(),
+      type: alertType,
+      condition: alertCondition,
+      createdAt: new Date().toLocaleString('zh-CN'),
+      status: 'active'
+    };
+    
+    if (alertType === 'price_alert' || alertType === 'position_change') {
+      if (!selectedSymbol) {
+        alert('请选择股票');
+        return;
+      }
+      
+      const symbolInfo = {
+        '600519': '贵州茅台',
+        '601318': '中国平安',
+        '000858': '五粮液',
+        '600036': '招商银行',
+        '601166': '兴业银行'
+      };
+      
+      newAlert.symbol = selectedSymbol;
+      newAlert.name = symbolInfo[selectedSymbol] || '未知';
+    }
+    
+    setAlerts([newAlert, ...alerts]);
+    setNewAlertOpen(false);
+    setAlertCondition('');
+    setSelectedSymbol('');
+  };
+  
+  return (
+    <div className="fade-in">
+      <div className="alerts-header">
+        <h3 className="module-section-title">交易提醒 
+          <span className="alerts-count">{activeAlertsCount}</span>
+        </h3>
+        <button 
+          className="btn btn-primary"
+          onClick={() => setNewAlertOpen(true)}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          添加提醒
+        </button>
+      </div>
+      
+      {alerts.length === 0 ? (
+        <div className="empty-state">
+          <p className="empty-description">暂无交易提醒</p>
+          <button 
+            className="btn btn-primary"
+            onClick={() => setNewAlertOpen(true)}
+          >
+            添加提醒
+          </button>
+        </div>
+      ) : (
+        <div className="alerts-list">
+          {alerts.map(alert => (
+            <div key={alert.id} className={`alert-item ${alert.status === 'triggered' ? 'triggered' : ''}`}>
+              <div className="alert-icon">
+                {alert.type === 'price_alert' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="2" x2="12" y2="6"></line>
+                    <line x1="12" y1="18" x2="12" y2="22"></line>
+                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                    <line x1="2" y1="12" x2="6" y2="12"></line>
+                    <line x1="18" y1="12" x2="22" y2="12"></line>
+                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                  </svg>
+                )}
+                {alert.type === 'position_change' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                    <polyline points="16 7 22 7 22 13"></polyline>
+                  </svg>
+                )}
+                {alert.type === 'market_event' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                )}
+                {alert.type === 'custom' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                )}
+              </div>
+              <div className="alert-content">
+                <div className="alert-title">
+                  {alert.name ? `${alert.name} (${alert.symbol})` : '市场提醒'}
+                </div>
+                <div className="alert-condition">
+                  {alert.condition}
+                </div>
+                <div className="alert-meta">
+                  <div className="alert-time">
+                    创建于: {alert.createdAt}
+                    {alert.status === 'triggered' && (
+                      <span className="trigger-time">触发于: {alert.triggeredAt}</span>
+                    )}
+                  </div>
+                  <div className="alert-status">
+                    <span className={`alert-status-indicator ${alert.status}`}></span>
+                    {alert.status === 'active' ? '监控中' : '已触发'}
+                  </div>
+                </div>
+              </div>
+              <div className="alert-actions">
+                <button 
+                  className="btn-icon" 
+                  onClick={() => deleteAlert(alert.id)}
+                  title="删除"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {newAlertOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>创建新提醒</h3>
+              <button className="btn-icon" onClick={() => setNewAlertOpen(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="field-row">
+                <label>提醒类型</label>
+                <div className="field-input">
+                  <select value={alertType} onChange={(e) => setAlertType(e.target.value)}>
+                    <option value="price_alert">价格提醒</option>
+                    <option value="position_change">持仓变动</option>
+                    <option value="market_event">市场事件</option>
+                    <option value="custom">自定义</option>
+                  </select>
+                </div>
+              </div>
+              
+              {(alertType === 'price_alert' || alertType === 'position_change') && (
+                <div className="field-row">
+                  <label>选择股票</label>
+                  <div className="field-input">
+                    <select value={selectedSymbol} onChange={(e) => setSelectedSymbol(e.target.value)}>
+                      <option value="">请选择</option>
+                      <option value="600519">贵州茅台 (600519)</option>
+                      <option value="601318">中国平安 (601318)</option>
+                      <option value="000858">五粮液 (000858)</option>
+                      <option value="600036">招商银行 (600036)</option>
+                      <option value="601166">兴业银行 (601166)</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+              
+              <div className="field-row">
+                <label>提醒条件</label>
+                <div className="field-input">
+                  <input 
+                    type="text" 
+                    value={alertCondition}
+                    onChange={(e) => setAlertCondition(e.target.value)}
+                    placeholder={alertType === 'price_alert' ? '例如: 价格超过1850元' : 
+                              alertType === 'position_change' ? '例如: 持仓盈利超过5%' :
+                              alertType === 'market_event' ? '例如: 沪深300下跌超过1%' : '自定义条件'}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="btn btn-secondary" 
+                onClick={() => setNewAlertOpen(false)}
+              >
+                取消
+              </button>
+              <button 
+                className="btn btn-primary"
+                onClick={addNewAlert}
+              >
+                创建提醒
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// 交易智能助手组件
+function TradingAssistant({ trading }) {
+  const [message, setMessage] = useState('');
+  const [conversation, setConversation] = useState([
+    {
+      role: 'assistant',
+      content: '您好！我是VibeQuant交易助手，我可以帮助您管理实时交易策略、分析市场数据并执行交易指令。请问有什么可以帮您的？'
+    }
+  ]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  // 快捷操作列表
+  const quickActions = [
+    { id: 1, text: '如何优化我的策略?' },
+    { id: 2, text: '帮我分析当前持仓' },
+    { id: 3, text: '设置止盈止损' },
+    { id: 4, text: '市场今日有何变化?' }
+  ];
+  
+  // 发送消息到助手
+  const sendMessage = async () => {
+    if (!message.trim()) return;
+    
+    // 添加用户消息到对话
+    const userMessage = { role: 'user', content: message };
+    setConversation([...conversation, userMessage]);
+    setMessage('');
+    setIsProcessing(true);
+    
+    // 模拟LLM处理延迟
+    setTimeout(() => {
+      let response;
+      
+      // 简单的响应逻辑，实际项目中这里应该连接到LLM-Dev Agent
+      if (message.toLowerCase().includes('优化')) {
+        response = {
+          role: 'assistant',
+          content: '根据分析，您的策略在高波动市场表现不佳。我建议：\n\n1. 调整止损设置从8%提高到10%\n2. 减少单一行业持仓比例\n3. 增加低波动性资产配比\n\n需要我帮您实施这些更改吗？'
+        };
+      } else if (message.toLowerCase().includes('分析')) {
+        response = {
+          role: 'assistant',
+          content: `已分析当前${trading?.positions?.length || 5}个持仓，主要发现：\n\n- 金融板块占比过高(31.7%)\n- 贵州茅台(600519)接近技术突破点\n- 总体仓位61.4%，低于策略建议值70%\n\n建议考虑增加消费板块配置，减少金融板块敞口。`
+        };
+      } else if (message.toLowerCase().includes('止盈') || message.toLowerCase().includes('止损')) {
+        response = {
+          role: 'assistant',
+          content: '已根据您的策略风险特征生成最优止盈止损方案：\n\n- 全局止损：-10%\n- 个股止损：-15%\n- 全局止盈：+25%\n- 个股止盈：根据波动率动态调整\n\n需要应用这些设置吗？'
+        };
+      } else if (message.toLowerCase().includes('市场') || message.toLowerCase().includes('变化')) {
+        response = {
+          role: 'assistant',
+          content: '今日市场重要变化：\n\n1. 沪深300上涨0.74%，成交量较昨日增加12.3%\n2. 央行维持LPR利率不变\n3. 您关注的板块：消费+1.32%，科技+0.85%，金融+0.41%\n4. 外盘：恒生+0.9%，纳指期货+0.3%'
+        };
+      } else {
+        response = {
+          role: 'assistant',
+          content: '我已收到您的指令。作为VibeQuant交易助手，我会将您的请求传递给Runner Agent进行处理，并在完成后向您反馈结果。有其他问题或需求请随时告诉我。'
+        };
+      }
+      
+      setConversation(prev => [...prev, response]);
+      setIsProcessing(false);
+    }, 1500);
+  };
+  
+  // 使用快捷操作
+  const useQuickAction = (actionText) => {
+    setMessage(actionText);
+  };
+  
+  // 处理键盘提交
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+  
+  return (
+    <div className="fade-in">
+      <h3 className="module-section-title">交易智能助手</h3>
+      
+      <div className="assistant-card">
+        <div className="assistant-header">
+          <div className="assistant-avatar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 8V4m0 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM12 16a4 4 0 100-8 4 4 0 000 8z"></path>
+              <path d="M12 8V4m0 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM12 16a4 4 0 100-8 4 4 0 000 8z"></path>
+              <path d="M16 8h1.5C19.3 8 20 8.7 20 11v0c0 2.3-.7 3-2.5 3H16"></path>
+              <path d="M8 8H6.5C4.7 8 4 8.7 4 11v0c0 2.3.7 3 2.5 3H8"></path>
+            </svg>
+          </div>
+          <div className="assistant-info">
+            <h4>VibeQuant 交易助手</h4>
+            <p>由 LLM-Dev Agent 支持</p>
+          </div>
+        </div>
+        
+        <div className="assistant-conversation">
+          {conversation.map((msg, index) => (
+            <div key={index} className={`message ${msg.role}`}>
+              {msg.role === 'assistant' && (
+                <div className="assistant-message">
+                  {msg.content.split('\n').map((line, i) => (
+                    <React.Fragment key={i}>
+                      {line}
+                      {i < msg.content.split('\n').length - 1 && <br />}
+                    </React.Fragment>
+                  ))}
+                </div>
+              )}
+              {msg.role === 'user' && (
+                <div className="user-message">
+                  <div className="message-content">{msg.content}</div>
+                </div>
+              )}
+            </div>
+          ))}
+          
+          {isProcessing && (
+            <div className="assistant-typing">
+              <div className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        <div className="assistant-quick-actions">
+          {quickActions.map(action => (
+            <button 
+              key={action.id}
+              className="quick-action-btn"
+              onClick={() => useQuickAction(action.text)}
+            >
+              {action.text}
+            </button>
+          ))}
+        </div>
+        
+        <div className="assistant-input-container">
+          <textarea
+            className="assistant-input"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="输入您的交易指令或问题..."
+            rows="2"
+          />
+          <button 
+            className="assistant-send-btn"
+            onClick={sendMessage}
+            disabled={isProcessing || !message.trim()}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            发送
+          </button>
+        </div>
+      </div>
+      
+      <div className="assistant-integration-info">
+        <h4>关于交易助手</h4>
+        <p>
+          VibeQuant交易助手集成了三层代理架构：
+        </p>
+        <ul>
+          <li><strong>LLM-Dev Agent</strong>: 将自然语言转换为数据请求、因子代码和风险设置</li>
+          <li><strong>Runner Agent</strong>: 在容器中执行YAML/脚本，将结果推送到UI</li>
+          <li><strong>Explainer Agent</strong>: 分析结果，通过图表和叙述回答问题</li>
+        </ul>
+        <p>
+          通过这种架构，您可以使用自然语言指令来控制和优化您的交易策略，无需编写代码或手动调整参数。
+        </p>
       </div>
     </div>
   );

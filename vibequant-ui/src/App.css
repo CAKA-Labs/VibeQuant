@@ -78,6 +78,14 @@ body {
   font-weight: 600;
   font-size: 1.5rem;
   color: var(--primary-color);
+  display: flex;
+  align-items: center;
+}
+
+.brand-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
 }
 
 /* Button styles - Material Design-like */

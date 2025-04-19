@@ -216,7 +216,7 @@ function PipelineView() {
         <div className="bento-header">
           <div className="bento-header-left">
             <Link to="/" className="bento-title">
-              VibeQuant | {project.name}
+              <img src="/vibe-quant.png" alt="VibeQuant" className="brand-logo" /> | {project.name}
             </Link>
             <span className={`project-status ${project.status}`}>
               <span className="status-indicator"></span>
