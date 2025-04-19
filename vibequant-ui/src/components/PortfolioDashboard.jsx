@@ -23,27 +23,27 @@ const portfolioData = {
 const historicalData = {
   '1M': Array.from({ length: 30 }, (_, i) => ({
     date: new Date(2025, 3, i + 1).toISOString().split('T')[0],
-    value: 476550 + Math.floor(Math.random() * 1000) + i * 2600
+    value: 476550 + Math.floor(Math.random() * 12000) - 6000 + i * 2600
   })),
   '3M': Array.from({ length: 90 }, (_, i) => ({
     date: new Date(2025, 1, i + 1).toISOString().split('T')[0],
-    value: 426550 + Math.floor(Math.random() * 2000) + i * 1420
+    value: 426550 + Math.floor(Math.random() * 18000) - 9000 + i * 1420
   })),
   '6M': Array.from({ length: 180 }, (_, i) => ({
     date: new Date(2024, 10, i + 1).toISOString().split('T')[0],
-    value: 376550 + Math.floor(Math.random() * 3000) + i * 1000
+    value: 376550 + Math.floor(Math.random() * 24000) - 12000 + i * 1000
   })),
   '1Y': Array.from({ length: 365 }, (_, i) => ({
     date: new Date(2024, 4, i + 1).toISOString().split('T')[0],
-    value: 276550 + Math.floor(Math.random() * 4000) + i * 760
+    value: 276550 + Math.floor(Math.random() * 30000) - 15000 + i * 760
   })),
   'YTD': Array.from({ length: 109 }, (_, i) => ({
     date: new Date(2025, 0, i + 1).toISOString().split('T')[0],
-    value: 450000 + Math.floor(Math.random() * 2000) + i * 960
+    value: 450000 + Math.floor(Math.random() * 20000) - 10000 + i * 960
   })),
   'ALL': Array.from({ length: 730 }, (_, i) => ({
     date: new Date(2023, 4, i + 1).toISOString().split('T')[0],
-    value: 150000 + Math.floor(Math.random() * 5000) + i * 540
+    value: 150000 + Math.floor(Math.random() * 40000) - 20000 + i * 540
   }))
 };
 
