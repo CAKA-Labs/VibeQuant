@@ -1,30 +1,39 @@
-# Stage 1: Build the React app
-FROM node:18-alpine AS build
+# Build stage
+FROM node:18-alpine as build
+
+# Set working directory
 WORKDIR /app
-# Copy package.json and lock file
-COPY vibequant/package*.json ./
+
+# Copy package.json and package-lock.json from vibequant-ui directory
+COPY vibequant-ui/package*.json ./
+
 # Install dependencies
 RUN npm install
-# Copy the rest of the application code
-COPY vibequant/ .
+
+# Copy all files from vibequant-ui directory
+COPY vibequant-ui/ ./
+
 # Build the application
 RUN npm run build
 
-# Stage 2: Serve the app using Nginx
-FROM nginx:stable-alpine
+# Production stage
+FROM nginx:alpine
 
-# Copy built assets from the build stage to Nginx HTML directory
+# Copy built files from build stage to nginx serve directory
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Remove the default Nginx configuration
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Copy our custom Nginx configuration
-# Assuming nginx.conf remains in the vibequant directory
-COPY vibequant/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy custom nginx configuration to serve the React app
+RUN echo 'server { \
+    listen 8080; \
+    location / { \
+        root /usr/share/nginx/html; \
+        index index.html; \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
 # Expose port 8080
 EXPOSE 8080
 
-# Start Nginx in the foreground
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
