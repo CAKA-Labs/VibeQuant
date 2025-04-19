@@ -1,7 +1,38 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import FinancialChart from '../components/FinancialChart'; // Import the new chart component
-import ChatPanel from '../components/ChatPanel'; // Import the new ChatPanel
+import FinancialChart from '../components/FinancialChart';
+import ChatPanel from '../components/ChatPanel';
+
+// Material Design风格的图标组件
+const DataIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 -960 960 960" width="28" fill="currentColor">
+    <path d="M480-120q-151 0-255.5-46.5T120-280v-400q0-66 104.5-113T480-840q151 0 255.5 47T840-680v400q0 67-104.5 113.5T480-120Zm0-479q-138 0-226.5-39T180-720q0-43 88.5-81.5T480-840q138 0 226.5 39T780-720q0 43-88.5 81.5T480-599Zm0 199q42 0 81-4t74.5-11.5q35.5-7.5 67-18.5t57.5-25v-151q-23 14-57.5 25t-67 18.5Q600-559 561-555.5t-81 4q-42 0-82-4t-75.5-11.5Q287-575 254-586t-56-25v151q23 14 56 25t65.5 18.5Q355-409 395-405t85 5Zm0 200q42 0 81.5-4t74.5-11.5q35.5-7.5 67-18.5t57-25v-151q-22 14-56.5 25t-67 18.5Q601-359 562-355.5t-82 4q-42 0-81.5-4t-74.5-11.5q-35.5-7.5-67-18.5t-57-25v151q23 14 56.5 25t67 18.5Q359-209 398.5-205.5t81.5 5Z"/>
+  </svg>
+);
+
+const FactorIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 -960 960 960" width="28" fill="currentColor">
+    <path d="M440-183v-274L200-596v-224l240 144v-121l320 192-320 192v-121l-120 71 120 73v207l-240-144L440-183Zm0-394v80l-160-96 160-96v80l320-192-320 192Z"/>
+  </svg>
+);
+
+const StrategyIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 -960 960 960" width="28" fill="currentColor">
+    <path d="m388-80-20-126q-19-7-40-19t-37-25l-118 48-93-164 108-79q-2-9-2.5-20.5T185-486q0-9 .5-20.5T188-527L80-606l93-164 118 48q16-13 37-25t40-18l20-127h184l20 126q19 7 40.5 18.5T669-722l118-48 93 164-108 77q2 10 2.5 21.5t.5 21.5q0 10-.5 21t-2.5 21l108 78-93 164-118-48q-16 13-36.5 25.5T592-206L572-80H388Zm48-60h88l14-112q33-8 62.5-25t53.5-41l106 43 40-72-94-69q4-17 6.5-33.5T715-486q0-17-2-33.5t-7-33.5l94-69-40-72-106 43q-23-26-52-43.5T538-708l-14-112h-88l-14 112q-34 8-63.5 25.5T305-640l-106-43-40 72 94 69q-4 17-6.5 33.5T244-486q0 17 2.5 33.5T253-419l-94 69 40 72 106-43q24 24 53.5 41t62.5 25l14 112Zm44-340q53 0 90.5-37.5T608-608q0-53-37.5-90.5T480-736q-53 0-90.5 37.5T352-608q0 53 37.5 90.5T480-480Zm0-128Z"/>
+  </svg>
+);
+
+const BacktestIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 -960 960 960" width="28" fill="currentColor">
+    <path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/>
+  </svg>
+);
+
+const LiveIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 -960 960 960" width="28" fill="currentColor">
+    <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Zm-40 120v-240h80v240h-80Z"/>
+  </svg>
+);
 
 // Mock project data
 const mockProjects = [
@@ -55,7 +86,7 @@ function PipelineView() {
 
   const handleNodeClick = (node) => {
     setSelectedNode(node);
-    // Optionally reset chat or add a system message when node changes
+    // Add a system message when node changes
     setChatMessages([
       { sender: 'system', message: `Switched to ${node}. How can I help you configure or analyze it?` }
     ]);
@@ -64,11 +95,37 @@ function PipelineView() {
   const handleSendMessage = (messageText) => {
     if (!messageText.trim()) return;
     
-    const newUserMessage = { sender: 'user', message: messageText };
-    // Simulate agent response (replace with actual agent logic)
-    const agentResponse = { sender: 'system', message: `Received: "${messageText}". Processing for ${selectedNode}...` };
+    // We already added the user message in the ChatPanel component
+    // Just add the system response here
+    const agentResponse = { 
+      sender: 'system', 
+      message: `I'll process your request about ${selectedNode}: "${messageText}".
+      
+Currently, I can help you with:
+• Fetching and configuring data sources
+• Creating and optimizing factors
+• Building trading strategies
+• Running backtests
+• Monitoring live trading
 
-    setChatMessages([...chatMessages, newUserMessage, agentResponse]);
+What specific aspect of ${selectedNode} would you like to work on?` 
+    };
+
+    // Add agent response with a slight delay to simulate processing
+    setTimeout(() => {
+      setChatMessages(prev => [...prev, agentResponse]);
+    }, 600);
+  };
+
+  const getNodeIcon = (node) => {
+    switch(node) {
+      case 'data': return <DataIcon />;
+      case 'factor': return <FactorIcon />;
+      case 'strategy': return <StrategyIcon />;
+      case 'backtest': return <BacktestIcon />;
+      case 'live': return <LiveIcon />;
+      default: return null;
+    }
   };
 
   const renderNodeDetails = () => {
@@ -500,14 +557,15 @@ notifications:
     );
   };
 
+  // Main component return
   return (
     <div className="pipeline-view-container">
       <main className="pipeline-main-area">
-        <header style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h2 style={{ margin: 0, fontSize: '1.8rem', fontWeight: '500' }}>{project.name}</h2>
-            <div style={{display: 'flex', gap: '12px'}}>
-              <button className="btn" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <header className="project-header">
+          <div className="project-title-section">
+            <h2>{project.name}</h2>
+            <div className="project-actions">
+              <button className="btn">
                 <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor">
                   <path d="M440-120v-240h80v80h320v80H520v80h-80Zm-320-80v-80h240v80H120Zm160-160v-80H120v-80h160v-80h80v240h-80Zm80-320v-80h80v-240h80v240h80v80H360Zm320-80v-80h160v80H680Z"/>
                 </svg>
@@ -516,107 +574,62 @@ notifications:
               <button 
                 className="btn" 
                 style={{
-                  backgroundColor: project.status === 'live' ? 'var(--warning-color)' : 'var(--success-color)',
+                  backgroundColor: project.status === 'live' ? 'var(--warning-500)' : 'var(--success-500)',
                   color: 'white',
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '8px'
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor">
                   <path d="m380-300 280-180-280-180v360ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/>
                 </svg>
-                {project.status === 'live' ? 'Pause' : 'Go Live'}
+                {project.status === 'live' ? 'Pause Trading' : 'Go Live'}
               </button>
-              <button className="btn" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button className="btn">
                 <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20" fill="currentColor">
-                  <path d="M240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                  <path d="M220-160q-24 0-42-18t-18-42v-143h60v143h520v-143h60v143q0 24-18 42t-42 18H220Zm260-153L287-506l43-43 120 120v-371h60v371l120-120 43 43-193 193Z"/>
                 </svg>
                 Export
               </button>
             </div>
           </div>
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '16px',
-            backgroundColor: 'transparent',
-            marginBottom: '24px'
-          }}>
-            <div style={{
-              backgroundColor: 'var(--surface-color)',
-              borderRadius: 'var(--border-radius-lg)',
-              padding: '16px',
-              boxShadow: 'var(--box-shadow)',
-              transition: 'all var(--transition-normal)'
-            }}>
-              <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Status</div>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                fontSize: '1.2rem', 
-                fontWeight: '500',
-                color: project.status === 'live' ? 'var(--success-color)' : 'var(--warning-color)'
-              }}>
-                <span className={`status-indicator status-${project.status}`} style={{ width: '10px', height: '10px' }}></span>
-                <span style={{ marginLeft: '8px' }}>{project.status.charAt(0).toUpperCase() + project.status.slice(1)}</span>
+          
+          <div className="project-stats">
+            <div className="stat-card">
+              <div className="stat-card-title">Status</div>
+              <div className="stat-card-value">
+                <span className={`status-indicator status-${project.status}`}></span>
+                {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
               </div>
             </div>
             
-            <div style={{
-              backgroundColor: 'var(--surface-color)',
-              borderRadius: 'var(--border-radius-lg)',
-              padding: '16px',
-              boxShadow: 'var(--box-shadow)',
-              transition: 'all var(--transition-normal)'
-            }}>
-              <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Last Backtest</div>
-              <div style={{ fontSize: '1.2rem', fontWeight: '500' }}>{project.lastBacktest}</div>
+            <div className="stat-card">
+              <div className="stat-card-title">Last Backtest</div>
+              <div className="stat-card-value">{project.lastBacktest}</div>
             </div>
             
-            <div style={{
-              backgroundColor: 'var(--surface-color)',
-              borderRadius: 'var(--border-radius-lg)',
-              padding: '16px',
-              boxShadow: 'var(--box-shadow)',
-              transition: 'all var(--transition-normal)'
-            }}>
-              <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Cumulative PnL</div>
-              <div style={{ 
-                fontSize: '1.2rem', 
-                fontWeight: '500',
-                color: project.cumulativePnl >= 0 ? 'var(--success-color)' : 'var(--error-color)'
-              }}>{project.cumulativePnl}%</div>
+            <div className="stat-card">
+              <div className="stat-card-title">P&L</div>
+              <div className="stat-card-value" style={{ 
+                color: project.cumulativePnl >= 0 ? 'var(--success-500)' : 'var(--error-500)' 
+              }}>
+                {project.cumulativePnl}%
+              </div>
             </div>
             
-            <div style={{
-              backgroundColor: 'var(--surface-color)',
-              borderRadius: 'var(--border-radius-lg)',
-              padding: '16px',
-              boxShadow: 'var(--box-shadow)',
-              transition: 'all var(--transition-normal)'
-            }}>
-              <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>T-Score</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{
-                  height: '8px',
-                  flex: '1',
-                  backgroundColor: '#eee',
-                  borderRadius: '4px',
-                  overflow: 'hidden'
-                }}>
-                  <div style={{
-                    height: '100%',
-                    width: `${project.tScore}%`,
-                    backgroundColor: project.tScore > 70 ? 'var(--success-color)' : 
-                                    project.tScore > 40 ? 'var(--warning-color)' : 
-                                    'var(--error-color)',
-                    borderRadius: '4px',
-                    transition: 'width 0.5s ease'
-                  }}></div>
+            <div className="stat-card">
+              <div className="stat-card-title">T-Score</div>
+              <div className="stat-card-value">
+                <div className="score-bar">
+                  <div 
+                    className="score-fill" 
+                    style={{
+                      width: `${project.tScore}%`,
+                      backgroundColor: project.tScore > 70 ? 'var(--success-500)' : 
+                                      project.tScore > 40 ? 'var(--warning-500)' : 
+                                      'var(--error-500)'
+                    }}
+                  ></div>
                 </div>
-                <div style={{ fontSize: '1.2rem', fontWeight: '500' }}>{project.tScore}</div>
+                <div className="score-value">{project.tScore}</div>
               </div>
             </div>
           </div>
@@ -632,10 +645,10 @@ notifications:
             onClick={() => handleNodeClick('data')}
             style={{
               transform: selectedNode === 'data' ? 'translateY(-4px) scale(1.05)' : 'scale(1)',
-              boxShadow: selectedNode === 'data' ? 'var(--box-shadow-elevated)' : 'var(--box-shadow)'
+              boxShadow: selectedNode === 'data' ? 'var(--shadow-3)' : 'var(--shadow-1)'
             }}
           >
-            <div className="pipeline-node-icon">📊</div>
+            <div className="pipeline-node-icon">{getNodeIcon('data')}</div>
             <div className="pipeline-node-title">Data</div>
             <div className="pipeline-node-status">
               <span className="status-indicator status-live"></span>
@@ -650,10 +663,10 @@ notifications:
             onClick={() => handleNodeClick('factor')}
             style={{
               transform: selectedNode === 'factor' ? 'translateY(-4px) scale(1.05)' : 'scale(1)',
-              boxShadow: selectedNode === 'factor' ? 'var(--box-shadow-elevated)' : 'var(--box-shadow)'
+              boxShadow: selectedNode === 'factor' ? 'var(--shadow-3)' : 'var(--shadow-1)'
             }}
           >
-            <div className="pipeline-node-icon">🧩</div>
+            <div className="pipeline-node-icon">{getNodeIcon('factor')}</div>
             <div className="pipeline-node-title">Factor</div>
             <div className="pipeline-node-status">
               <span className="status-indicator status-live"></span>
@@ -668,10 +681,10 @@ notifications:
             onClick={() => handleNodeClick('strategy')}
             style={{
               transform: selectedNode === 'strategy' ? 'translateY(-4px) scale(1.05)' : 'scale(1)',
-              boxShadow: selectedNode === 'strategy' ? 'var(--box-shadow-elevated)' : 'var(--box-shadow)'
+              boxShadow: selectedNode === 'strategy' ? 'var(--shadow-3)' : 'var(--shadow-1)'
             }}
           >
-            <div className="pipeline-node-icon">🎯</div>
+            <div className="pipeline-node-icon">{getNodeIcon('strategy')}</div>
             <div className="pipeline-node-title">Strategy</div>
             <div className="pipeline-node-status">
               <span className="status-indicator status-live"></span>
@@ -686,10 +699,10 @@ notifications:
             onClick={() => handleNodeClick('backtest')}
             style={{
               transform: selectedNode === 'backtest' ? 'translateY(-4px) scale(1.05)' : 'scale(1)',
-              boxShadow: selectedNode === 'backtest' ? 'var(--box-shadow-elevated)' : 'var(--box-shadow)'
+              boxShadow: selectedNode === 'backtest' ? 'var(--shadow-3)' : 'var(--shadow-1)'
             }}
           >
-            <div className="pipeline-node-icon">🔍</div>
+            <div className="pipeline-node-icon">{getNodeIcon('backtest')}</div>
             <div className="pipeline-node-title">Backtest</div>
             <div className="pipeline-node-status">
               <span className="status-indicator status-live"></span>
@@ -704,10 +717,10 @@ notifications:
             onClick={() => handleNodeClick('live')}
             style={{
               transform: selectedNode === 'live' ? 'translateY(-4px) scale(1.05)' : 'scale(1)',
-              boxShadow: selectedNode === 'live' ? 'var(--box-shadow-elevated)' : 'var(--box-shadow)'
+              boxShadow: selectedNode === 'live' ? 'var(--shadow-3)' : 'var(--shadow-1)'
             }}
           >
-            <div className="pipeline-node-icon">🚀</div>
+            <div className="pipeline-node-icon">{getNodeIcon('live')}</div>
             <div className="pipeline-node-title">Live</div>
             <div className="pipeline-node-status">
               <span className={`status-indicator status-${project.status}`}></span>
