@@ -93,7 +93,7 @@ export function FactorModule() {
           </button>
         </div>
         <div className="toolbar-spacer"></div>
-        <button className="btn btn-primary" onClick={addFactor}>
+        <button className="btn-tiffany" onClick={addFactor}>
           添加因子
         </button>
       </div>
@@ -189,19 +189,19 @@ function FactorItem({ factor, onSelect, onDelete, onTest }) {
       
       <div className="flex gap-2 mt-3 justify-end">
         <button 
-          className="btn btn-secondary btn-sm" 
+          className="btn-tiffany" 
           onClick={() => onTest(factor)}
         >
           测试
         </button>
         <button 
-          className="btn btn-primary btn-sm" 
+          className="btn-tiffany" 
           onClick={() => onSelect(factor)}
         >
           编辑
         </button>
         <button 
-          className="btn btn-danger btn-sm" 
+          className="btn-tiffany-danger" 
           onClick={(e) => {
             e.stopPropagation();
             onDelete(id);
@@ -245,7 +245,7 @@ function FactorEditor({ factor, onSave, onTest, onBack }) {
   return (
     <div className="fade-in">
       <button 
-        className="btn btn-secondary mb-4" 
+        className="btn-tiffany" 
         onClick={onBack}
       >
         返回列表
@@ -300,14 +300,14 @@ function FactorEditor({ factor, onSave, onTest, onBack }) {
         <div className="flex gap-3 justify-end mt-4">
           <button 
             type="button" 
-            className="btn btn-secondary"
             onClick={() => onTest(editingFactor)}
+            className="btn-tiffany"
           >
             测试因子
           </button>
           <button 
             type="submit" 
-            className="btn btn-primary"
+            className="btn-tiffany"
           >
             保存因子
           </button>

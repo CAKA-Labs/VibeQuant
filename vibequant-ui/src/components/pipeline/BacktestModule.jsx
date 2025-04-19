@@ -288,7 +288,7 @@ export function BacktestModule() {
         </div>
         <div className="toolbar-spacer"></div>
         <button 
-          className="btn btn-primary"
+          className="btn-tiffany"
           onClick={createNewBacktest}
           disabled={isCreating || isRunning}
         >
@@ -321,7 +321,7 @@ export function BacktestModule() {
               <h3 className="empty-title">暂无回测数据</h3>
               <p className="empty-description">点击"新建回测"按钮开始创建</p>
               <button 
-                className="btn btn-primary"
+                className="btn-tiffany"
                 onClick={createNewBacktest}
               >
                 新建回测
@@ -360,7 +360,7 @@ export function BacktestModule() {
               <div className="empty-state">
                 <p className="empty-description">暂无回测记录</p>
                 <button 
-                  className="btn btn-primary"
+                  className="btn-tiffany"
                   onClick={createNewBacktest}
                 >
                   新建回测
@@ -399,7 +399,7 @@ export function BacktestModule() {
                         <td>
                           <div className="flex gap-2">
                             <button 
-                              className="btn-icon"
+                              className="btn-tiffany"
                               onClick={() => selectBacktest(backtest)}
                               title="查看详情"
                             >
@@ -409,7 +409,7 @@ export function BacktestModule() {
                               </svg>
                             </button>
                             <button 
-                              className="btn-icon"
+                              className="btn-tiffany-danger"
                               onClick={() => deleteBacktest(backtest.id)}
                               title="删除"
                             >
@@ -935,7 +935,7 @@ function BacktestSettings({ isCreating, settings, onSettingsChange, onNumberChan
       <div className="backtest-actions">
         {currentStep > 1 && (
           <button 
-            className="btn btn-secondary"
+            className="btn-tiffany"
             onClick={prevStep}
           >
             上一步
@@ -944,7 +944,7 @@ function BacktestSettings({ isCreating, settings, onSettingsChange, onNumberChan
         
         {currentStep < totalSteps && (
           <button 
-            className="btn btn-primary"
+            className="btn-tiffany"
             onClick={nextStep}
           >
             下一步
@@ -955,20 +955,16 @@ function BacktestSettings({ isCreating, settings, onSettingsChange, onNumberChan
           <>
             {!isCreating && (
               <button 
-                className="btn btn-secondary"
+                className="btn-tiffany"
                 onClick={onCancel}
               >
                 取消
               </button>
             )}
             <button 
-              className="btn btn-primary"
+              className="btn-tiffany"
               onClick={onRun}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="13 17 18 12 13 7"></polyline>
-                <polyline points="6 17 11 12 6 7"></polyline>
-              </svg>
               {isCreating ? '创建并运行' : '更新并重新运行'}
             </button>
           </>
@@ -977,3 +973,18 @@ function BacktestSettings({ isCreating, settings, onSettingsChange, onNumberChan
     </div>
   );
 }
+
+function BacktestRunner({ settings, onComplete, onCancel }) {
+  // ... (State for progress, logs, etc.)
+  return (
+    <div className="p-4 border rounded-lg bg-white shadow-sm fade-in">
+      <h3>运行回测</h3>
+      {/* Progress bar, logs display */} 
+      <div className="flex justify-end space-x-3 mt-4">
+        <button onClick={onCancel} className="btn-tiffany-danger">取消运行</button>
+      </div>
+    </div>
+  );
+}
+
+// ... (Other components)

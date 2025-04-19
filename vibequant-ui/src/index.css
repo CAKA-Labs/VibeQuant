@@ -254,6 +254,164 @@ p {
   transform: none;
 }
 
+/* New global button styles */
+.btn-tiffany {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  background-color: #0ABAB5;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.btn-tiffany:hover {
+  background-color: #089a94;
+  transform: translateY(-1px);
+}
+
+.btn-tiffany:active {
+  background-color: #067f7a;
+  transform: translateY(0px);
+}
+
+.btn-tiffany:disabled {
+  background-color: #a0dcdc;
+  color: #f0fafa;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Danger Button Variant */
+.btn-tiffany-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem; /* Match base */
+  background-color: #E57373; /* A suitable red */
+  color: white;
+  border: none;
+  border-radius: 12px; /* Match base */
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+  box-shadow: none; /* Match base */
+  text-decoration: none;
+}
+
+.btn-tiffany-danger:hover {
+  background-color: #EF5350; /* Darker red */
+  transform: translateY(-1px);
+}
+
+.btn-tiffany-danger:active {
+  background-color: #E53935; /* Even darker red */
+  transform: translateY(0px);
+}
+
+.btn-tiffany-danger:disabled {
+  background-color: #FFCDD2; /* Lighter, desaturated red */
+  color: #ffebee;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.chart-period-btn {
+  padding: 0.3rem 0.8rem;
+  margin: 0 0.2rem;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #555;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: none;
+}
+
+.chart-period-btn:hover {
+  background-color: #e0f7fa;
+  border-color: #0ABAB5;
+  color: #089a94;
+}
+
+.chart-period-btn.active {
+  background-color: #0ABAB5;
+  color: white;
+  border-color: #0ABAB5;
+  font-weight: 500;
+}
+
+.btn-more-actions {
+  padding: 0.2rem 0.5rem;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: none;
+}
+
+.btn-more-actions:hover {
+  background-color: #e0f7fa;
+  border-color: #0ABAB5;
+  color: #089a94;
+}
+
+.bento-button.send-icon-button {
+  padding: 0.5rem;
+  background-color: #0ABAB5;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  box-shadow: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bento-button.send-icon-button:hover {
+  background-color: #089a94;
+}
+
+.bento-button.send-icon-button:disabled {
+  background-color: #a0dcdc;
+  cursor: not-allowed;
+}
+
+.bento-confirm-btn {
+  padding: 0.6rem 1.2rem;
+  background-color: #0ABAB5;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  box-shadow: none;
+}
+
+.bento-confirm-btn:hover {
+  background-color: #089a94;
+}
+
+.bento-confirm-btn:disabled {
+  background-color: #a0dcdc;
+  color: #f0fafa;
+  cursor: not-allowed;
+  transform: none;
+}
+
 /* Input styles */
 input, textarea, select {
   padding: var(--space-3) var(--space-4);
@@ -826,11 +984,6 @@ input:focus, textarea:focus, select:focus {
   border-color: #0abab5;
   box-shadow: none;
   transform: translateY(-1px);
-}
-
-.chat-panel-input button {
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--border-radius-lg);
 }
 
 /* ======================================

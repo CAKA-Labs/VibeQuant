@@ -210,7 +210,8 @@ select.form-control {
   transform: scale(1.2);
 }
 
-/* ====== 按钮样式 ====== */
+/* General button styling - Commented out to prefer global btn-tiffany styles */
+/*
 .btn {
   display: inline-flex;
   align-items: center;
@@ -280,6 +281,7 @@ select.form-control {
   opacity: 0.6;
   cursor: not-allowed;
 }
+*/
 
 /* ====== 表格样式 ====== */
 .table {

@@ -107,7 +107,7 @@ export function DataModule() {
           </button>
         </div>
         <div className="toolbar-spacer"></div>
-        <button className="btn btn-primary" onClick={addDataSource}>
+        <button className="btn-tiffany" onClick={addDataSource}>
           添加数据源
         </button>
       </div>
@@ -176,25 +176,25 @@ function DataSourcesList({ dataSources, onSelect, onDelete, onToggleConnection, 
           
           <div className="flex gap-2 justify-end">
             <button 
-              className={`btn btn-sm ${source.status === 'connected' ? 'btn-secondary' : 'btn-success'}`} 
+              className={`btn-tiffany ${source.status === 'connected' ? 'btn-tiffany-danger' : ''}`} 
               onClick={() => onToggleConnection(source)}
             >
               {source.status === 'connected' ? '断开' : '连接'}
             </button>
             <button 
-              className="btn btn-sm btn-secondary" 
+              className="btn-tiffany" 
               onClick={() => onPreview(source)}
             >
               预览
             </button>
             <button 
-              className="btn btn-sm btn-primary" 
+              className="btn-tiffany" 
               onClick={() => onSelect(source)}
             >
               配置
             </button>
             <button 
-              className="btn btn-sm btn-danger" 
+              className="btn-tiffany-danger" 
               onClick={() => onDelete(source.id)}
             >
               删除
@@ -256,7 +256,7 @@ function DataSourceConfig({ dataSource, onSave, onBack }) {
   return (
     <div className="fade-in">
       <button 
-        className="btn btn-secondary mb-4" 
+        className="btn-tiffany mb-4" 
         onClick={onBack}
       >
         返回列表
@@ -369,7 +369,7 @@ function DataSourceConfig({ dataSource, onSave, onBack }) {
         </div>
         
         <div className="flex justify-end mt-4">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn-tiffany">
             保存配置
           </button>
         </div>
@@ -390,15 +390,14 @@ function DataPreview({ dataSource, previewData, onBack }) {
 
   return (
     <div className="fade-in">
-      <div className="flex justify-between items-center mb-4">
-        <button 
-          className="btn btn-secondary" 
-          onClick={onBack}
-        >
-          返回列表
-        </button>
-        <h3>{dataSource.name} - 数据预览</h3>
-      </div>
+      <button 
+        className="btn-tiffany mb-4" 
+        onClick={onBack}
+      >
+        返回列表
+      </button>
+      
+      <h3>{dataSource.name} - 数据预览</h3>
       
       <div className="pipeline-card">
         <div className="pipeline-card-content">

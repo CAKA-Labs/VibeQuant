@@ -273,7 +273,7 @@ export function LiveModule() {
         </div>
         <div className="toolbar-spacer"></div>
         <button 
-          className="btn btn-primary"
+          className="btn-tiffany"
           onClick={createNewLiveTrading}
           disabled={isCreating}
         >
@@ -348,7 +348,7 @@ export function LiveModule() {
               <div className="empty-state">
                 <p className="empty-description">暂无交易策略</p>
                 <button 
-                  className="btn btn-primary"
+                  className="btn-tiffany"
                   onClick={createNewLiveTrading}
                 >
                   部署新策略
@@ -460,8 +460,8 @@ export function LiveModule() {
                 {/* 设置内容 */}
               </div>
               <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setShowSettingsModal(false)}>取消</button>
-                <button className="btn btn-primary">保存设置</button>
+                <button className="btn-tiffany" onClick={() => setShowSettingsModal(false)}>取消</button>
+                <button className="btn-tiffany">保存设置</button>
               </div>
             </div>
           </div>
@@ -531,7 +531,7 @@ function LiveTradingOverview({
         </div>
         <div className="live-trading-actions">
           {trading.status === 'running' ? (
-            <button className="btn btn-warning" onClick={onPause}>
+            <button className="btn-tiffany-danger" onClick={onPause}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="6" y="4" width="4" height="16"></rect>
                 <rect x="14" y="4" width="4" height="16"></rect>
@@ -539,20 +539,20 @@ function LiveTradingOverview({
               暂停
             </button>
           ) : (
-            <button className="btn btn-success" onClick={onStart}>
+            <button className="btn-tiffany" onClick={onStart}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="5 3 19 12 5 21 5 3"></polygon>
               </svg>
               启动
             </button>
           )}
-          <button className="btn btn-danger" onClick={onStop}>
+          <button className="btn-tiffany-danger" onClick={onStop}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
             </svg>
             停止
           </button>
-          <button className="btn btn-secondary" onClick={onShowSettings}>
+          <button className="btn-tiffany" onClick={onShowSettings}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="3"></circle>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -782,6 +782,12 @@ function PositionsTable({ positions, formatPercent }) {
     return (
       <div className="empty-state">
         <p className="empty-description">当前没有持仓</p>
+        <button 
+          className="btn-tiffany"
+          onClick={() => console.log('部署新策略')}
+        >
+          部署新策略
+        </button>
       </div>
     );
   }
@@ -960,6 +966,12 @@ function TradesTable({ trades, formatTime, formatCurrency }) {
     return (
       <div className="empty-state">
         <p className="empty-description">暂无交易记录</p>
+        <button 
+          className="btn-tiffany"
+          onClick={() => console.log('部署新策略')}
+        >
+          部署新策略
+        </button>
       </div>
     );
   }
@@ -1334,7 +1346,7 @@ function LiveTradingSettings({ isCreating, trading, onSave, onCancel }) {
       <div className="backtest-actions">
         {currentStep > 1 && (
           <button 
-            className="btn btn-secondary"
+            className="btn-tiffany"
             onClick={prevStep}
           >
             上一步
@@ -1343,7 +1355,7 @@ function LiveTradingSettings({ isCreating, trading, onSave, onCancel }) {
         
         {currentStep < totalSteps && (
           <button 
-            className="btn btn-primary"
+            className="btn-tiffany"
             onClick={nextStep}
           >
             下一步
@@ -1353,13 +1365,13 @@ function LiveTradingSettings({ isCreating, trading, onSave, onCancel }) {
         {currentStep === totalSteps && (
           <>
             <button 
-              className="btn btn-secondary"
+              className="btn-tiffany"
               onClick={onCancel}
             >
               取消
             </button>
             <button 
-              className="btn btn-primary"
+              className="btn-tiffany"
               onClick={onSave}
             >
               {isCreating ? '部署策略' : '保存更改'}
@@ -1621,7 +1633,7 @@ function TradeAlerts() {
           <span className="alerts-count">{activeAlertsCount}</span>
         </h3>
         <button 
-          className="btn btn-primary"
+          className="btn-tiffany"
           onClick={() => setNewAlertOpen(true)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1636,7 +1648,7 @@ function TradeAlerts() {
         <div className="empty-state">
           <p className="empty-description">暂无交易提醒</p>
           <button 
-            className="btn btn-primary"
+            className="btn-tiffany"
             onClick={() => setNewAlertOpen(true)}
           >
             添加提醒
@@ -1776,13 +1788,13 @@ function TradeAlerts() {
             </div>
             <div className="modal-footer">
               <button 
-                className="btn btn-secondary" 
+                className="btn-tiffany" 
                 onClick={() => setNewAlertOpen(false)}
               >
                 取消
               </button>
               <button 
-                className="btn btn-primary"
+                className="btn-tiffany"
                 onClick={addNewAlert}
               >
                 创建提醒

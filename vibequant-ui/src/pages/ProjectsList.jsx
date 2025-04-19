@@ -135,7 +135,7 @@ function ProjectsList() {
         <div className="app-logo">
           <img src="/vibe-quant.png" alt="VibeQuant" className="brand-logo" />
         </div>
-        <Link to="/project/new" className="btn btn-primary">
+        <Link to="/project/new" className="btn-tiffany">
           <span className="icon">+</span> 新建策略
         </Link>
       </header>
@@ -191,7 +191,7 @@ function ProjectsList() {
                 </div>
               </div>
               <div className="project-card-actions">
-                 <button className="btn">⋯</button> {/* More actions placeholder */}
+                 <button className="btn-more-actions">⋯</button> {/* More actions placeholder */}
               </div>
             </Link>
           ))}

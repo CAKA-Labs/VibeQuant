@@ -119,9 +119,7 @@ export function StrategyModule() {
           </button>
         </div>
         <div className="toolbar-spacer"></div>
-        <button className="btn btn-primary" onClick={addStrategy}>
-          创建策略
-        </button>
+        {activeTab === 'list' && <button className="btn-tiffany" onClick={addStrategy}>创建策略</button>}
       </div>
 
       <div className="module-content">
@@ -216,19 +214,19 @@ function StrategyItem({ strategy, onSelect, onDelete, onToggle, onEdit }) {
       
       <div className="flex gap-2 justify-end">
         <button 
-          className={`btn btn-sm ${status === 'active' ? 'btn-secondary' : 'btn-success'}`} 
+          className={`btn-tiffany ${status === 'active' ? 'btn-tiffany-danger' : ''}`} 
           onClick={() => onToggle(strategy)}
         >
           {status === 'active' ? '停用' : '激活'}
         </button>
         <button 
-          className="btn btn-sm btn-primary" 
+          className="btn-tiffany" 
           onClick={() => onEdit(strategy)}
         >
           编辑
         </button>
         <button 
-          className="btn btn-sm btn-danger" 
+          className="btn-tiffany-danger" 
           onClick={() => onDelete(id)}
         >
           删除
@@ -306,7 +304,7 @@ function StrategyEditor({ strategy, onSave, onBack }) {
   return (
     <div className="fade-in">
       <button 
-        className="btn btn-secondary mb-4" 
+        className="btn-tiffany mb-4" 
         onClick={onBack}
       >
         返回列表
@@ -379,7 +377,7 @@ function StrategyEditor({ strategy, onSave, onBack }) {
                     <div className="weight-slider-value">{weight.toFixed(1)}</div>
                     <button
                       type="button"
-                      className="btn btn-sm btn-danger"
+                      className="btn-tiffany-danger"
                       onClick={() => removeFactorWeight(factor)}
                     >
                       删除
@@ -411,7 +409,7 @@ function StrategyEditor({ strategy, onSave, onBack }) {
                 />
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn-tiffany"
                   onClick={addFactorWeight}
                 >
                   添加
@@ -476,7 +474,17 @@ function StrategyEditor({ strategy, onSave, onBack }) {
         </div>
         
         <div className="flex justify-end mt-4">
-          <button type="submit" className="btn btn-primary">
+          <button 
+            type="button"
+            className="btn-tiffany"
+            onClick={onBack}
+          >
+            取消
+          </button>
+          <button 
+            type="submit"
+            className="btn-tiffany"
+          >
             保存策略
           </button>
         </div>
