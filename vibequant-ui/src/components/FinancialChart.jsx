@@ -56,7 +56,7 @@ const FinancialChart = ({
             trigger: 'axis',
             formatter: function(params) {
                 const data = params[0];
-                return `${data.name}<br/>${data.marker}$${data.value.toLocaleString()}`;
+                return `${data.name}<br/>${data.marker}¥${data.value.toLocaleString()}`;
             }
         },
         grid: {
@@ -89,11 +89,11 @@ const FinancialChart = ({
                 color: textColor,
                 formatter: function(value) {
                     if (value >= 1000000) {
-                        return '$' + (value / 1000000).toFixed(1) + 'M';
+                        return '¥' + (value / 1000000).toFixed(1) + '百万';
                     } else if (value >= 1000) {
-                        return '$' + (value / 1000).toFixed(0) + 'K';
+                        return '¥' + (value / 1000).toFixed(0) + '千';
                     }
-                    return '$' + value;
+                    return '¥' + value;
                 }
             },
             splitLine: { 
@@ -133,7 +133,7 @@ const FinancialChart = ({
         ],
         series: [
             {
-                name: '资金',
+                name: '资产',
                 type: 'line',
                 smooth: false,
                 symbol: 'circle',

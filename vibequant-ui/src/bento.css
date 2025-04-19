@@ -1,0 +1,362 @@
+/* ======================================
+ * BENTO 设计系统 - VibeQuant
+ * ======================================
+ * 
+ * 基于网格的模块化布局系统，灵感来自日本便当盒
+ * 特点：清晰的边界、一致的间距、模块化组件
+ */
+
+/* ====== 1. 设计系统变量 ====== */
+:root {
+  /* 间距系统 */
+  --bento-unit: 8px;                /* 基础单位 */
+  --bento-spacing-xs: 4px;          /* 极小间距 */
+  --bento-spacing-sm: 8px;          /* 小间距 */
+  --bento-spacing-md: 16px;         /* 中间距 */
+  --bento-spacing-lg: 24px;         /* 大间距 */
+  --bento-spacing-xl: 32px;         /* 超大间距 */
+  
+  /* 盒子系统 */
+  --bento-radius-sm: 8px;           /* 小圆角 */
+  --bento-radius-md: 12px;          /* 中圆角 */
+  --bento-radius-lg: 16px;          /* 大圆角 */
+  --bento-border: 1px solid rgba(0, 0, 0, 0.08); /* 统一边框 */
+  --bento-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* 统一阴影 */
+  
+  /* 颜色系统 - 使用应用已有变量或定义新变量 */
+  --bento-bg-primary: #FFFFFF;      /* 主要背景色 */
+  --bento-bg-secondary: #F5F5F5;    /* 次要背景色 */
+  --bento-border-color: #EEEEEE;    /* 边框颜色 */
+  --bento-primary: #2196F3;         /* 主色调 */
+  --bento-primary-light: #E3F2FD;   /* 主色调浅色 */
+  --bento-text-primary: #212121;    /* 主要文本色 */
+  --bento-text-secondary: #757575;  /* 次要文本色 */
+}
+
+/* ====== 2. 基础布局系统 ====== */
+.bento-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: var(--bento-spacing-md);
+  box-sizing: border-box;
+  background-color: var(--bento-bg-secondary);
+  overflow: hidden;
+  gap: var(--bento-spacing-md);
+}
+
+/* 左侧主内容区 */
+.bento-main {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bento-spacing-md);
+  overflow-y: auto;
+}
+
+/* 右侧聊天区 */
+.bento-chat-area {
+  flex: 1;
+  max-width: 400px;
+  min-width: 320px;
+  display: flex;
+  border-radius: var(--bento-radius-lg);
+  border: var(--bento-border);
+  box-shadow: var(--bento-shadow);
+  background-color: var(--bento-bg-primary);
+  overflow: hidden;
+}
+
+/* ====== 3. 基础模块 ====== */
+
+/* 项目标题区 */
+.bento-header {
+  background-color: var(--bento-bg-primary);
+  border-radius: var(--bento-radius-lg);
+  border: var(--bento-border);
+  box-shadow: var(--bento-shadow);
+  padding: var(--bento-spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bento-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--bento-text-primary);
+  text-decoration: none;
+}
+
+/* 管道导航 */
+.bento-pipeline {
+  background-color: var(--bento-bg-primary);
+  border-radius: var(--bento-radius-lg);
+  border: var(--bento-border);
+  box-shadow: var(--bento-shadow);
+  padding: var(--bento-spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--bento-spacing-sm);
+}
+
+/* 节点 */
+.bento-node {
+  background-color: var(--bento-bg-primary);
+  border-radius: var(--bento-radius-md);
+  border: var(--bento-border);
+  padding: var(--bento-spacing-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--bento-spacing-xs);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.bento-node-icon {
+  font-size: 1.5rem;
+  margin-bottom: var(--bento-spacing-xs);
+}
+
+.bento-node-title {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.bento-node-status {
+  font-size: 0.75rem;
+  color: var(--bento-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--bento-spacing-xs);
+}
+
+.bento-node:hover {
+  transform: translateY(-2px);
+}
+
+.bento-node.active {
+  border-color: var(--bento-primary);
+  background-color: var(--bento-primary-light);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bento-connector {
+  color: var(--bento-text-secondary);
+  font-weight: 300;
+  font-size: 1.2rem;
+}
+
+/* 内容区 */
+.bento-content {
+  background-color: var(--bento-bg-primary);
+  border-radius: var(--bento-radius-lg);
+  border: var(--bento-border);
+  box-shadow: var(--bento-shadow);
+  padding: var(--bento-spacing-lg);
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* ====== 4. 聊天系统 ====== */
+.bento-chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.bento-chat-header {
+  padding: var(--bento-spacing-md);
+  border-bottom: var(--bento-border);
+  font-weight: 600;
+  background-color: var(--bento-bg-primary);
+}
+
+.bento-chat-messages {
+  flex-grow: 1;
+  padding: var(--bento-spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--bento-spacing-md);
+  overflow-y: auto;
+  background-color: var(--bento-bg-secondary);
+}
+
+.bento-message {
+  max-width: 85%;
+  align-self: flex-start;
+}
+
+.bento-message.user {
+  align-self: flex-end;
+}
+
+.bento-message-bubble {
+  background-color: var(--bento-bg-primary);
+  border-radius: var(--bento-radius-md);
+  border: var(--bento-border);
+  padding: var(--bento-spacing-md);
+  box-shadow: var(--bento-shadow);
+}
+
+.bento-message-bubble.user {
+  background-color: var(--bento-primary-light);
+  border-color: var(--bento-primary);
+}
+
+.bento-chat-input {
+  padding: var(--bento-spacing-md);
+  border-top: var(--bento-border);
+  background-color: var(--bento-bg-primary);
+}
+
+.bento-chat-form {
+  display: flex;
+  gap: var(--bento-spacing-sm);
+}
+
+.bento-input {
+  flex: 1;
+  padding: var(--bento-spacing-sm) var(--bento-spacing-md);
+  border-radius: var(--bento-radius-md);
+  border: var(--bento-border);
+  background-color: var(--bento-bg-secondary);
+}
+
+.bento-button {
+  padding: var(--bento-spacing-sm) var(--bento-spacing-md);
+  border-radius: var(--bento-radius-md);
+  border: none;
+  background-color: var(--bento-primary);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bento-button:hover {
+  background-color: #1976D2; /* 稍深的蓝色 */
+}
+
+/* ====== 5. 兼容层 - 保留旧类名 ====== */
+
+/* 项目页面布局兼容 */
+.pipeline-view-container {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.pipeline-main-area {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bento-spacing-md);
+  padding: var(--bento-spacing-md);
+  overflow-y: auto;
+}
+
+.pipeline-chat-area {
+  flex: 1;
+  max-width: 400px;
+  min-width: 320px;
+  display: flex;
+  border-left: var(--bento-border);
+  background-color: var(--bento-bg-primary);
+}
+
+.project-header {
+  background-color: var(--bento-bg-primary);
+  border-radius: var(--bento-radius-lg);
+  border: var(--bento-border);
+  box-shadow: var(--bento-shadow);
+  padding: var(--bento-spacing-md);
+}
+
+.pipeline-navigator {
+  background-color: var(--bento-bg-primary);
+  border-radius: var(--bento-radius-lg);
+  border: var(--bento-border);
+  box-shadow: var(--bento-shadow);
+  padding: var(--bento-spacing-md);
+}
+
+.pipeline-main-content {
+  background-color: var(--bento-bg-primary);
+  border-radius: var(--bento-radius-lg);
+  border: var(--bento-border);
+  box-shadow: var(--bento-shadow);
+  padding: var(--bento-spacing-lg);
+}
+
+/* 聊天面板兼容 */
+.chat-panel { 
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.chat-panel-header { 
+  padding: var(--bento-spacing-md);
+  border-bottom: var(--bento-border);
+  font-weight: 600;
+  background-color: var(--bento-bg-primary);
+}
+
+.chat-panel-messages { 
+  flex-grow: 1;
+  padding: var(--bento-spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--bento-spacing-md);
+  overflow-y: auto;
+  background-color: var(--bento-bg-secondary); 
+}
+
+.chat-message { 
+  max-width: 85%;
+  align-self: flex-start;
+}
+
+.chat-message.user { 
+  align-self: flex-end;
+}
+
+.chat-bubble {
+  background-color: var(--bento-bg-primary);
+  border-radius: var(--bento-radius-md);
+  border: var(--bento-border);
+  padding: var(--bento-spacing-md);
+  box-shadow: var(--bento-shadow);
+}
+
+.chat-bubble.user {
+  background-color: var(--bento-primary-light);
+  border-color: var(--bento-primary);
+}
+
+.chat-panel-input {
+  padding: var(--bento-spacing-md);
+  border-top: var(--bento-border);
+  background-color: var(--bento-bg-primary);
+}
+
+.chat-panel-input form {
+  display: flex;
+  gap: var(--bento-spacing-sm);
+}
+
+.chat-panel-input input[type="text"] {
+  flex: 1;
+  padding: var(--bento-spacing-sm) var(--bento-spacing-md);
+  border-radius: var(--bento-radius-md);
+  border: var(--bento-border);
+  background-color: var(--bento-bg-secondary);
+}

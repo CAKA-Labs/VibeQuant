@@ -11,11 +11,11 @@ const portfolioData = {
   availableCash: 120000,
   riskScore: 72,
   assetAllocation: [
-    { name: 'Alpha Strategy', value: 32, color: '#2196F3' },
-    { name: 'Beta Momentum', value: 18, color: '#4CAF50' },
-    { name: 'Delta Reversal', value: 28, color: '#673AB7' },
-    { name: 'Volatility Trend', value: 14, color: '#FF9800' },
-    { name: 'Other Strategies', value: 8, color: '#F44336' }
+    { name: 'Alpha 策略', value: 32, color: '#2196F3' },
+    { name: 'Beta 动量', value: 18, color: '#4CAF50' },
+    { name: 'Delta 反转', value: 28, color: '#673AB7' },
+    { name: '波动率趋势', value: 14, color: '#FF9800' },
+    { name: '其他策略', value: 8, color: '#F44336' }
   ]
 };
 
@@ -55,7 +55,7 @@ function PortfolioDashboard() {
       <div className="portfolio-summary">
         <div className="portfolio-card">
           <div className="portfolio-card-label">投资组合总值</div>
-          <div className="portfolio-card-value">${portfolioData.totalValue.toLocaleString()}</div>
+          <div className="portfolio-card-value">¥{portfolioData.totalValue.toLocaleString()}</div>
           <div className={`portfolio-card-change ${portfolioData.percentageChange >= 0 ? 'positive' : 'negative'}`}>
             {portfolioData.percentageChange >= 0 ? '↑' : '↓'} 
             {portfolioData.percentageChange.toFixed(2)}% 总体收益
@@ -64,7 +64,7 @@ function PortfolioDashboard() {
         
         <div className="portfolio-card">
           <div className="portfolio-card-label">总盈利</div>
-          <div className="portfolio-card-value">${portfolioData.totalProfit.toLocaleString()}</div>
+          <div className="portfolio-card-value">¥{portfolioData.totalProfit.toLocaleString()}</div>
           <div className={`portfolio-card-change ${portfolioData.dailyChange >= 0 ? 'positive' : 'negative'}`}>
             {portfolioData.dailyChange >= 0 ? '↑' : '↓'} 
             {portfolioData.dailyChange.toFixed(2)}% 今日
@@ -73,7 +73,7 @@ function PortfolioDashboard() {
         
         <div className="portfolio-card">
           <div className="portfolio-card-label">可用资金</div>
-          <div className="portfolio-card-value">${portfolioData.availableCash.toLocaleString()}</div>
+          <div className="portfolio-card-value">¥{portfolioData.availableCash.toLocaleString()}</div>
           <div className="portfolio-card-change">
             {((portfolioData.availableCash / portfolioData.totalValue) * 100).toFixed(1)}% 未配置
           </div>
@@ -91,7 +91,7 @@ function PortfolioDashboard() {
       <div className="chart-section">
         <div className="portfolio-chart">
           <div className="chart-header">
-            <h3 className="chart-title">资金表现</h3>
+            <h3 className="chart-title">资产表现</h3>
             <div className="chart-controls">
               <button 
                 className={`chart-period-btn ${activeChartPeriod === '1M' ? 'active' : ''}`}

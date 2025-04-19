@@ -6,7 +6,7 @@ import PortfolioDashboard from '../components/PortfolioDashboard'
 const mockProjects = [
   { 
     id: 1, 
-    name: 'Alpha Strategy', 
+    name: 'Alpha 策略', 
     lastBacktest: '2025-04-15', 
     pnl: [5, 8, -2, 3, 7, 9, 3, -1, 4, 6, 2, 5, -1, 3, 6, 8, 4, 1, 5, 7, 3, 9, -2, 4, 6, 8, 5, 2, 4, 7], // 30 data points
     status: 'live',
@@ -22,7 +22,7 @@ const mockProjects = [
   },
   { 
     id: 2, 
-    name: 'Beta Momentum', 
+    name: 'Beta 动量', 
     lastBacktest: '2025-04-10', 
     pnl: [2, -1, -3, 4, 5, 6, 1, 0, -2, 3, 1, 4, -1, 2, 5, 4, 2, 1, 3, 6, 0, -1, 2, 4, 3, 1, 2, 5, -1, 0], // 30 data points
     status: 'paused',
@@ -38,7 +38,7 @@ const mockProjects = [
   },
   { 
     id: 3, 
-    name: 'Gamma Factor', 
+    name: 'Gamma 因子', 
     lastBacktest: '2025-03-28', 
     pnl: [0, 1, 0, -1, 1, 0, 0, 1, 0, -1, 0, 0, 1, 0, 0, 0, -1, 0, 1, 0, 0, 0, 1, 0, -1, 0, 0, 1, 0, 0], // 30 data points
     status: 'idle',
@@ -54,7 +54,7 @@ const mockProjects = [
   },
   { 
     id: 4, 
-    name: 'Delta Reversal', 
+    name: 'Delta 反转', 
     lastBacktest: '2025-04-18', 
     pnl: [7, 5, 8, 9, 6, 10, 8, 7, 9, 11, 6, 8, 5, 9, 10, 12, 9, 8, 10, 11, 7, 9, 6, 10, 11, 13, 10, 8, 11, 12], // 30 data points
     status: 'live',
@@ -70,7 +70,7 @@ const mockProjects = [
   },
   { 
     id: 5, 
-    name: 'Volatility Trend', 
+    name: '波动率趋势', 
     lastBacktest: '2025-04-01', 
     pnl: [-3, -1, 0, -2, 1, -1, 0, -2, -1, 0, 1, -1, -2, 0, -1, -3, 0, -1, -2, 1, -1, 0, -2, -1, 0, 1, -1, -2, 0, -1], // 30 data points
     status: 'idle',
@@ -160,13 +160,13 @@ function ProjectsList() {
     <div>
       <header className="app-header">
         <div className="app-logo">
-          <span>VibeQuant</span>
+          <span>量化韵律</span>
         </div>
         <button 
           className="btn btn-primary" 
           onClick={() => setShowNewProjectModal(true)}
         >
-          <span className="btn-icon">+</span> New Project
+          <span className="btn-icon">+</span> 新建项目
         </button>
       </header>
 
@@ -181,35 +181,35 @@ function ProjectsList() {
                 <span className="project-card-title">{project.name}</span>
                 <span className={`project-card-status ${project.status}`}>
                   <span className="status-indicator"></span>
-                  {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+                  {project.status === 'live' ? '运行中' : project.status === 'paused' ? '暂停' : '空闲'}
                 </span>
               </div>
               <div className="project-card-body">
                 <div className="project-metrics-grid">
                   <div className="project-card-metric">
-                    <span className="metric-label">Investment</span>
+                    <span className="metric-label">投资额</span>
                     <span className="metric-value">${project.investmentAmount.toLocaleString()}</span>
                   </div>
                   <div className="project-card-metric">
-                    <span className="metric-label">Return</span>
+                    <span className="metric-label">收益率</span>
                     <span className={`metric-value ${project.returns >= 0 ? 'positive' : 'negative'}`}>
                       {project.returns >= 0 ? '+' : ''}{project.returns.toFixed(2)}%
                     </span>
                   </div>
                   <div className="project-card-metric">
-                    <span className="metric-label">Sharpe</span>
+                    <span className="metric-label">夏普比率</span>
                     <span className="metric-value">{project.sharpe.toFixed(2)}</span>
                   </div>
                   <div className="project-card-metric">
-                    <span className="metric-label">Max DD</span>
+                    <span className="metric-label">最大回撤</span>
                     <span className="metric-value">-{project.maxDrawdown.toFixed(1)}%</span>
                   </div>
                   <div className="project-card-metric">
-                    <span className="metric-label">Volatility</span>
+                    <span className="metric-label">波动率</span>
                     <span className="metric-value">{project.volatility.toFixed(1)}%</span>
                   </div>
                   <div className="project-card-metric">
-                    <span className="metric-label">Win Rate</span>
+                    <span className="metric-label">胜率</span>
                     <span className="metric-value">{project.winRate}%</span>
                   </div>
                 </div>
@@ -217,7 +217,7 @@ function ProjectsList() {
                   <Sparkline data={project.pnl} width={240} height={30}/>
                 </div>
                 <div className="project-card-subtitle">
-                  Last Backtest: <strong>{project.lastBacktest}</strong> • Positions: <strong>{project.positions}</strong>
+                  最近回测: <strong>{project.lastBacktest}</strong> • 持仓数: <strong>{project.positions}</strong>
                 </div>
               </div>
               <div className="project-card-actions">
@@ -232,10 +232,10 @@ function ProjectsList() {
       {showNewProjectModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>Create New Project</h3>
+            <h3>创建新项目</h3>
             <input
               type="text"
-              placeholder="Project name"
+              placeholder="项目名称"
               value={newProjectName}
               onChange={(e) => setNewProjectName(e.target.value)}
             />
@@ -244,13 +244,13 @@ function ProjectsList() {
                 className="btn btn-secondary" 
                 onClick={() => setShowNewProjectModal(false)}
               >
-                Cancel
+                取消
               </button>
               <button 
                 className="btn btn-primary" 
                 onClick={handleCreateProject}
               >
-                Create
+                创建
               </button>
             </div>
           </div>

@@ -48,39 +48,32 @@ function ChatPanel({ initialMessages = [], onSendMessage, selectedNode = null })
     }, 600);
   };
 
-  // Determine the header title based on the selected node
-  const getPanelTitle = () => {
-    if (!selectedNode) return "Agent Chat";
-    const nodeName = selectedNode.charAt(0).toUpperCase() + selectedNode.slice(1);
-    return `${nodeName} Agent`;
-  };
-
   return (
-    <div className="chat-panel">
-      <div className="chat-panel-header">
-        <span>{getPanelTitle()}</span>
-        <div className="chat-panel-actions">
-          <button className="icon-button" title="Clear chat">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
-              <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" fill="currentColor"/>
-            </svg>
-          </button>
-        </div>
+    <div className="bento-chat">
+      <div className="bento-chat-header">
+        量化韵律助手
       </div>
-      <div className="chat-panel-messages">
-        {messages.map((msg, idx) => (
+      
+      <div className="bento-chat-messages">
+        {messages.length === 0 && (
+          <div className="bento-welcome-message">
+            <p>您好！我是量化韵律助手，可以帮助您构建、优化和监控量化交易策略。有什么我可以帮您的吗？</p>
+          </div>
+        )}
+        
+        {messages.map((msg, index) => (
           <div 
-            key={idx} 
-            className={`chat-message ${msg.sender === 'user' ? 'user' : 'agent'}`}
+            key={index} 
+            className={`bento-message ${msg.sender === 'user' ? 'user' : ''}`}
           >
-            <div className={`chat-bubble ${msg.sender === 'user' ? 'user' : 'agent'}`}>
+            <div className={`bento-message-bubble ${msg.sender === 'user' ? 'user' : ''}`}>
               {msg.message}
             </div>
           </div>
         ))}
         {isTyping && (
-          <div className="chat-message agent">
-            <div className="chat-bubble agent typing-indicator">
+          <div className="bento-message agent">
+            <div className="bento-message-bubble agent typing-indicator">
               <span></span>
               <span></span>
               <span></span>
@@ -89,23 +82,19 @@ function ChatPanel({ initialMessages = [], onSendMessage, selectedNode = null })
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div className="chat-panel-input">
-        <form onSubmit={handleChatSubmit}>
+      
+      <div className="bento-chat-input">
+        <form onSubmit={handleChatSubmit} className="bento-chat-form">
           <input
             ref={inputRef}
             type="text"
-            placeholder={selectedNode ? `Ask about ${selectedNode}...` : "Ask a question..."}
+            className="bento-input"
             value={chatInput}
             onChange={(e) => setChatInput(e.target.value)}
+            placeholder="输入您的问题..."
           />
-          <button 
-            type="submit" 
-            className="btn btn-primary"
-            disabled={!chatInput.trim()}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-              <path d="M120-160v-240l320-80-320-80v-240l760 320-760 320Z" fill="currentColor"/>
-            </svg>
+          <button type="submit" className="bento-button" disabled={!chatInput.trim()}>
+            发送
           </button>
         </form>
       </div>

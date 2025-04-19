@@ -629,18 +629,69 @@ input:focus, textarea:focus, select:focus {
   background-color: var(--surface-color);
 }
 
+/* Bento风格的聊天面板 */
+.bento-box {
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-2);
+  border: 1px solid var(--neutral-100);
+  background-color: var(--surface-color);
+  transition: all var(--transition-normal);
+  overflow: hidden;
+}
+
+.bento-box .chat-panel-header {
+  background-color: var(--neutral-50);
+  padding: var(--space-5) var(--space-5);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.bento-box .chat-panel-messages {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-color: var(--neutral-50);
+  border-top: 1px solid var(--neutral-100);
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.bento-box .chat-bubble.agent {
+  background-color: var(--surface-color);
+  border: 1px solid var(--neutral-100);
+  box-shadow: var(--shadow-1);
+}
+
+.bento-box .chat-panel-input {
+  background-color: var(--neutral-50);
+  padding: var(--space-5) var(--space-5);
+}
+
+.bento-box .chat-panel-input input[type="text"] {
+  border-radius: var(--border-radius-lg);
+  background-color: var(--surface-color);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--neutral-200);
+  font-size: var(--font-size-md);
+}
+
+.bento-box .chat-panel-input button {
+  border-radius: var(--border-radius-lg);
+}
+
 .chat-panel-header {
   padding: var(--space-4) var(--space-5);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   background-color: var(--surface-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  font-size: 1.1em;
+  font-size: var(--font-size-lg);
   color: var(--text-primary);
   position: relative;
   z-index: 5;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid var(--divider-color);
 }
 
 .chat-panel-actions {
@@ -767,14 +818,14 @@ input:focus, textarea:focus, select:focus {
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--divider-color);
   background-color: var(--background-color);
-  font-size: 1rem;
+  font-size: var(--font-size-md);
   transition: all var(--transition-normal);
 }
 
 .chat-panel-input input[type="text"]:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px var(--primary-light);
-  transform: translateY(-2px);
+  box-shadow: 0 0 0 2px var(--primary-50);
+  transform: translateY(-1px);
 }
 
 .chat-panel-input button {
@@ -1309,7 +1360,6 @@ input:focus, textarea:focus, select:focus {
   border-radius: var(--border-radius-lg);
   position: relative;
   word-wrap: break-word;
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .chat-bubble:hover {
@@ -1337,7 +1387,7 @@ input:focus, textarea:focus, select:focus {
   align-items: center;
   justify-content: flex-start;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-5);
   min-width: 60px;
   position: relative;
 }
@@ -1359,11 +1409,14 @@ input:focus, textarea:focus, select:focus {
 }
 
 @keyframes typingGlow {
-  0%, 100% {
+  0% {
     opacity: 0.3;
   }
   50% {
     opacity: 0.8;
+  }
+  100% {
+    opacity: 0.3;
   }
 }
 
