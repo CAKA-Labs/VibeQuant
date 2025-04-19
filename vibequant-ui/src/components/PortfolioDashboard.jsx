@@ -11,11 +11,11 @@ const portfolioData = {
   availableCash: 120000,
   riskScore: 72,
   assetAllocation: [
-    { name: 'Alpha 策略', value: 32, color: '#2196F3' },
-    { name: 'Beta 动量', value: 18, color: '#4CAF50' },
-    { name: 'Delta 反转', value: 28, color: '#673AB7' },
-    { name: '波动率趋势', value: 14, color: '#FF9800' },
-    { name: '其他策略', value: 8, color: '#F44336' }
+    { name: 'Alpha 策略', value: 32, color: '#0abab5' }, 
+    { name: 'Beta 动量', value: 18, color: '#008080' },  
+    { name: 'Delta 反转', value: 28, color: '#39c5bb' }, 
+    { name: '波动率趋势', value: 14, color: '#7fd1cb' }, 
+    { name: '其他策略', value: 8, color: '#d5f2f0' }     
   ]
 };
 
