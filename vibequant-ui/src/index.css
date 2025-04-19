@@ -3,66 +3,201 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   margin: 0;
+}
+
+/* ==================
+   Pipeline View Specific Styles
+   ================== */
+
+.pipeline-view-container {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  height: calc(100vh - 60px); /* Adjust based on header/nav height if any */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.breadcrumb {
+  padding: 12px 24px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.breadcrumb a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.pipeline-navigator {
+  display: flex;
+  justify-content: center; /* Center nodes horizontally */
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: #fff; /* Give it a background */
+  flex-shrink: 0; /* Prevent navigator from shrinking */
+}
+
+.pipeline-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 16px;
+  margin: 0 8px; /* Spacing between nodes */
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  border-radius: 8px;
+  border: 2px solid transparent; /* For active state */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  min-width: 100px; /* Ensure nodes have some width */
+  text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.pipeline-node:hover {
+  background-color: #f0f0f0;
 }
+
+.pipeline-node.active {
+  border-color: var(--primary-color);
+  background-color: #e7f3ff; /* Light blue background for active */
+}
+
+.pipeline-node-icon {
+  font-size: 1.8rem; /* Slightly smaller icons */
+  margin-bottom: 4px;
+}
+
+.pipeline-node-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.pipeline-node-status {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pipeline-arrow {
+  font-size: 1.5rem;
+  color: var(--border-color);
+  margin: 0 8px; /* Spacing around arrows */
+}
+
+.pipeline-main-content {
+  flex-grow: 1; /* Allow content to fill remaining space */
+  padding: 24px;
+  overflow-y: auto; /* Add scroll if content overflows */
+  background-color: #f8f9fa; /* Slightly different background for content */
+}
+
+/* Node Details Styles (can be further refined) */
+.node-details {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  /* Allow it to grow, but Data node will override height */
+  height: 100%; 
+  display: flex; /* Use flexbox for internal layout */
+  flex-direction: column; /* Stack elements vertically */
+}
+
+/* Styles specific to the Data node's content area */
+.data-node-content-area {
+  padding: 0; /* Remove padding to maximize space */
+  box-shadow: none; /* Remove shadow */
+  border-radius: 0; /* Remove border-radius if needed */
+  background-color: transparent; /* Or specific background for data area */
+  /* Height is already 100% from .node-details */
+}
+
+/* Ensure the placeholder div inside data node can grow */
+.data-node-content-area > div[style*="height:"] {
+  flex-grow: 1; /* Allow the chart area to fill the remaining height */
+  height: auto !important; /* Override inline style if necessary, let flexbox control it */
+}
+
+.node-details-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 16px;
+}
+
+.node-details-tab {
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px; /* Overlap border */
+  color: var(--text-secondary);
+}
+
+.node-details-tab:hover {
+  color: var(--text-color);
+}
+
+.node-details-tab.active {
+  border-bottom-color: var(--primary-color);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.node-details-content h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--text-color);
+}
+
+.node-details-content p {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.node-details-content strong {
+  color: var(--text-color);
+}
+
+.prompt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prompt-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.version-history-list {
+  list-style: none;
+  padding: 0;
+}
+
+.version-history-list li {
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.version-history-list li:last-child {
+  border-bottom: none;
+}
+
+/* ==================
+   Chat Dock Styles
+   ================== */
+
+
+/* The existing .chat-dock styles below this comment should remain */
