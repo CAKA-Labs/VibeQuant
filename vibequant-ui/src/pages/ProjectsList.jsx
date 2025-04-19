@@ -122,8 +122,6 @@ const Sparkline = ({ data, height = 30, width = 100 }) => {
 
 function ProjectsList() {
   const [projects, setProjects] = useState(mockProjects);
-  const [showNewProjectModal, setShowNewProjectModal] = useState(false);
-  const [newProjectName, setNewProjectName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Filter projects based on search query
@@ -131,43 +129,15 @@ function ProjectsList() {
     ? projects.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
     : projects;
 
-  const handleCreateProject = () => {
-    if (!newProjectName.trim()) return;
-    
-    const newProject = {
-      id: projects.length + 1,
-      name: newProjectName,
-      lastBacktest: '-',
-      pnl: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      status: 'idle',
-      sharpe: 0,
-      investmentAmount: 0,
-      returns: 0,
-      maxDrawdown: 0,
-      volatility: 0,
-      returnToRisk: 0,
-      winRate: 0,
-      positions: 0,
-      avgTradeTime: 0
-    };
-    
-    setProjects([...projects, newProject]);
-    setNewProjectName('');
-    setShowNewProjectModal(false);
-  };
-
   return (
     <div>
       <header className="app-header">
         <div className="app-logo">
-          <span>量化韵律</span>
+          <span className="brand-name">VibeQuant</span>
         </div>
-        <button 
-          className="btn btn-primary" 
-          onClick={() => setShowNewProjectModal(true)}
-        >
-          <span className="btn-icon">+</span> 新建项目
-        </button>
+        <Link to="/project/new" className="btn btn-primary">
+          <span className="icon">+</span> 新建策略
+        </Link>
       </header>
 
       <main className="content-container">
@@ -227,35 +197,6 @@ function ProjectsList() {
           ))}
         </div>
       </main>
-
-      {/* New Project Modal */}
-      {showNewProjectModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>创建新项目</h3>
-            <input
-              type="text"
-              placeholder="项目名称"
-              value={newProjectName}
-              onChange={(e) => setNewProjectName(e.target.value)}
-            />
-            <div className="modal-actions">
-              <button 
-                className="btn btn-secondary" 
-                onClick={() => setShowNewProjectModal(false)}
-              >
-                取消
-              </button>
-              <button 
-                className="btn btn-primary" 
-                onClick={handleCreateProject}
-              >
-                创建
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

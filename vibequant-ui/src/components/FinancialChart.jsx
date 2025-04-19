@@ -116,7 +116,7 @@ const FinancialChart = ({
                 bottom: '5%',
                 height: 20,
                 borderColor: '#ddd',
-                fillerColor: 'rgba(167,183,204,0.4)',
+                fillerColor: 'rgba(10, 186, 181, 0.4)',
                 handleIcon: 'path://M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
                 handleSize: '80%',
                 handleStyle: {
@@ -140,21 +140,21 @@ const FinancialChart = ({
                 symbolSize: 1,
                 sampling: 'lttb',
                 itemStyle: {
-                    color: isPositive ? '#26a69a' : '#ef5350'
+                    color: isPositive ? '#0abab5' : '#ef5350'
                 },
                 lineStyle: {
                     width: 2,
-                    color: isPositive ? '#26a69a' : '#ef5350'
+                    color: isPositive ? '#0abab5' : '#ef5350'
                 },
                 areaStyle: {
                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                         {
                             offset: 0,
-                            color: isPositive ? 'rgba(38, 166, 154, 0.3)' : 'rgba(239, 83, 80, 0.3)'
+                            color: isPositive ? 'rgba(10, 186, 181, 0.3)' : 'rgba(239, 83, 80, 0.3)'
                         },
                         {
                             offset: 1,
-                            color: isPositive ? 'rgba(38, 166, 154, 0.05)' : 'rgba(239, 83, 80, 0.05)'
+                            color: isPositive ? 'rgba(10, 186, 181, 0.05)' : 'rgba(239, 83, 80, 0.05)'
                         }
                     ])
                 },

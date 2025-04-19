@@ -1,8 +1,8 @@
 :root {
-  --primary-color: #2196F3;
-  --primary-color-light: #E3F2FD;
-  --primary-dark: #1976D2;
-  --primary-super-light: #F5FAFF;
+  --primary-color: #0abab5;
+  --primary-color-light: #E0F7F6;
+  --primary-dark: #008080;
+  --primary-super-light: #F5FFFE;
   --success-color: #4CAF50;
   --warning-color: #FFC107;
   --error-color: #F44336;
@@ -21,8 +21,8 @@
   --text-light: #757575;
   --border-subtle: #EEEEEE;
   --border-medium: #E0E0E0;
-  --hover-bg: #F5F9FF;
-  --hover-border: #BBDEFB;
+  --hover-bg: #F5FFFD;
+  --hover-border: #B3ECE9;
   --bento-spacing: 20px;
 }
 
@@ -71,7 +71,7 @@ body {
   margin-top: var(--bento-spacing);
   margin-bottom: var(--bento-spacing);
   border-radius: var(--large-border-radius);
-  box-shadow: var(--shadow-2);
+  box-shadow: none;
 }
 
 .app-logo {
@@ -418,6 +418,7 @@ body {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
   color: white;
+  box-shadow: none;
 }
 
 .chart-period-btn:not(.active):hover {
@@ -524,4 +525,9 @@ body {
   .chart-controls {
     flex-wrap: wrap;
   }
+}
+
+.portfolio-chart, 
+.asset-allocation {
+  box-shadow: none;
 }

@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import FinancialChart from '../components/FinancialChart';
-import ChatPanel from '../components/ChatPanel';
+import AutoAgentChatPanel from '../components/AutoAgentChatPanel';
+import { DataModule } from '../components/pipeline/DataModule';
+import { FactorModule } from '../components/pipeline/FactorModule';
+import { StrategyModule } from '../components/pipeline/StrategyModule';
+import { BacktestModule } from '../components/pipeline/BacktestModule';
+import '../components/pipeline/pipeline.css';
 
 // Material Design风格的图标组件
 const DataIcon = () => (
@@ -171,6 +176,12 @@ function PipelineView() {
     }, 600);
   };
 
+  const handleModuleChange = (moduleName) => {
+    if (moduleName && moduleName !== selectedNode) {
+      setSelectedNode(moduleName);
+    }
+  };
+
   const getNodeIcon = (node) => {
     switch(node) {
       case 'data': return <DataIcon />;
@@ -182,433 +193,24 @@ function PipelineView() {
     }
   };
 
-  const renderNodeDetails = () => {
-    // Special handling for Data node to potentially use more space
-    if (selectedNode === 'data') {
-      return (
-        <div className="node-details data-node-content-area">
-          <h3>数据配置和可视化</h3>
-          <div className="node-detail-stats">
-            <div className="stat-item">
-              <span className="stat-label">来源</span>
-              <span className="stat-value">雅虎财经</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-label">股票代码</span>
-              <span className="stat-value">AAPL、MSFT、GOOG、AMZN、META</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-label">时间范围</span>
-              <span className="stat-value">每日</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-label">周期</span>
-              <span className="stat-value">最近两年</span>
-            </div>
-          </div>
-          <div className="chart-container"> 
-            <FinancialChart />
-          </div>
-          
-          <div className="chat-prompt-card">
-            <h5>需要修改数据源设置?</h5>
-            <p>使用Agent聊天面板配置、分析或修改数据组件。</p>
-            <div className="chat-prompt-examples">
-              <div className="chat-prompt-example" onClick={() => {
-                const examplePanel = document.querySelector('.chat-panel-input input');
-                if (examplePanel) {
-                  examplePanel.focus();
-                  examplePanel.value = "添加新的股票代码";
-                }
-              }}>
-                添加新的股票代码
-              </div>
-              <div className="chat-prompt-example" onClick={() => {
-                const examplePanel = document.querySelector('.chat-panel-input input');
-                if (examplePanel) {
-                  examplePanel.focus();
-                  examplePanel.value = "将时间范围更改为每周";
-                }
-              }}>
-                将时间范围更改为每周
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+  const renderModuleContent = (activeModule) => {
+    switch(activeModule) {
+      case 'data':
+        return <DataModule />;
+      case 'factor':
+        return <FactorModule />;
+      case 'strategy':
+        return <StrategyModule />;
+      case 'backtest':
+        return <BacktestModule />;
+      case 'live':
+        return <div className="module-content live-module">
+          <h2>Live Module</h2>
+          <p>This is the Live module content.</p>
+        </div>;
+      default:
+        return <div>Select a module</div>;
     }
-
-    // Default tabbed view for other nodes
-    return (
-      <div className="node-details">
-        <div className="node-details-tabs">
-          <div 
-            className={`node-details-tab ${activeTab === 'overview' ? 'active' : ''}`}
-            onClick={() => setActiveTab('overview')}
-          >
-            概览
-          </div>
-          <div 
-            className={`node-details-tab ${activeTab === 'config' ? 'active' : ''}`}
-            onClick={() => setActiveTab('config')}
-          >
-            配置
-          </div>
-          <div 
-            className={`node-details-tab ${activeTab === 'history' ? 'active' : ''}`}
-            onClick={() => setActiveTab('history')}
-          >
-            历史
-          </div>
-        </div>
-        
-        <div className="node-details-content">
-          {activeTab === 'overview' && (
-            <div>
-              <h4>{selectedNode.charAt(0).toUpperCase() + selectedNode.slice(1)} 概览</h4>
-              
-              <div className="node-detail-stats">
-                {selectedNode === 'factor' && (
-                  <>
-                    <div className="stat-item">
-                      <span className="stat-label">活跃因子</span>
-                      <span className="stat-value">3</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">最高IC</span>
-                      <span className="stat-value">0.42</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">最后更新</span>
-                      <span className="stat-value">2025-04-15</span>
-                    </div>
-                  </>
-                )}
-                
-                {selectedNode === 'strategy' && (
-                  <>
-                    <div className="stat-item">
-                      <span className="stat-label">策略类型</span>
-                      <span className="stat-value">均值回归</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">使用的因子</span>
-                      <span className="stat-value">2</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">风险限制</span>
-                      <span className="stat-value">5%</span>
-                    </div>
-                  </>
-                )}
-                
-                {selectedNode === 'backtest' && (
-                  <>
-                    <div className="stat-item">
-                      <span className="stat-label">夏普比率</span>
-                      <span className="stat-value">1.86</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">最大回撤</span>
-                      <span className="stat-value">-12.4%</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">胜率</span>
-                      <span className="stat-value">68%</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">测试周期</span>
-                      <span className="stat-value">2024 Q1</span>
-                    </div>
-                  </>
-                )}
-                
-                {selectedNode === 'live' && (
-                  <>
-                    <div className="stat-item">
-                      <span className="stat-label">状态</span>
-                      <span className="stat-value">{project.status === 'live' ? '运行中' : project.status === 'paused' ? '暂停' : '空闲'}</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">收益</span>
-                      <span className="stat-value">{project.cumulativePnl}%</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">头寸</span>
-                      <span className="stat-value">4 多 / 2 空</span>
-                    </div>
-                    <div className="stat-item">
-                      <span className="stat-label">开始日期</span>
-                      <span className="stat-value">2025-03-01</span>
-                    </div>
-                  </>
-                )}
-              </div>
-              
-              <div className="chat-prompt-card">
-                <h5>需要修改{selectedNode}配置?</h5>
-                <p>使用Agent聊天面板发送指令来配置、分析或修改该组件。</p>
-                <div className="chat-prompt-examples">
-                  {selectedNode === 'factor' && (
-                    <>
-                      <div className="chat-prompt-example" onClick={() => {
-                        const examplePanel = document.querySelector('.chat-panel-input input');
-                        if (examplePanel) {
-                          examplePanel.focus();
-                          examplePanel.value = "创建新的动量因子";
-                        }
-                      }}>
-                        创建新的动量因子
-                      </div>
-                      <div className="chat-prompt-example" onClick={() => {
-                        const examplePanel = document.querySelector('.chat-panel-input input');
-                        if (examplePanel) {
-                          examplePanel.focus();
-                          examplePanel.value = "优化因子权重";
-                        }
-                      }}>
-                        优化因子权重
-                      </div>
-                    </>
-                  )}
-                  
-                  {selectedNode === 'strategy' && (
-                    <>
-                      <div className="chat-prompt-example" onClick={() => {
-                        const examplePanel = document.querySelector('.chat-panel-input input');
-                        if (examplePanel) {
-                          examplePanel.focus();
-                          examplePanel.value = "添加止损设置";
-                        }
-                      }}>
-                        添加止损设置
-                      </div>
-                      <div className="chat-prompt-example" onClick={() => {
-                        const examplePanel = document.querySelector('.chat-panel-input input');
-                        if (examplePanel) {
-                          examplePanel.focus();
-                          examplePanel.value = "切换为趋势跟踪策略";
-                        }
-                      }}>
-                        切换为趋势跟踪策略
-                      </div>
-                    </>
-                  )}
-                  
-                  {selectedNode === 'backtest' && (
-                    <>
-                      <div className="chat-prompt-example" onClick={() => {
-                        const examplePanel = document.querySelector('.chat-panel-input input');
-                        if (examplePanel) {
-                          examplePanel.focus();
-                          examplePanel.value = "使用更长的回测周期";
-                        }
-                      }}>
-                        使用更长的回测周期
-                      </div>
-                      <div className="chat-prompt-example" onClick={() => {
-                        const examplePanel = document.querySelector('.chat-panel-input input');
-                        if (examplePanel) {
-                          examplePanel.focus();
-                          examplePanel.value = "添加交易成本";
-                        }
-                      }}>
-                        添加交易成本
-                      </div>
-                    </>
-                  )}
-                  
-                  {selectedNode === 'live' && (
-                    <>
-                      <div className="chat-prompt-example" onClick={() => {
-                        const examplePanel = document.querySelector('.chat-panel-input input');
-                        if (examplePanel) {
-                          examplePanel.focus();
-                          examplePanel.value = "更改头寸规模限制";
-                        }
-                      }}>
-                        更改头寸规模限制
-                      </div>
-                      <div className="chat-prompt-example" onClick={() => {
-                        const examplePanel = document.querySelector('.chat-panel-input input');
-                        if (examplePanel) {
-                          examplePanel.focus();
-                          examplePanel.value = "设置通知选项";
-                        }
-                      }}>
-                        设置通知选项
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {activeTab === 'config' && (
-            <div>
-              <h4>{selectedNode.charAt(0).toUpperCase() + selectedNode.slice(1)} 配置</h4>
-              {selectedNode === 'factor' && (
-                <div className="config-editor">
-                  <pre className="code-block">
-{`# 因子配置
-factors:
-  - name: momentum_20d
-    type: momentum
-    lookback: 20
-    normalization: zscore
-    
-  - name: volume_trend
-    type: volume
-    lookback: 10
-    smoothing: 3
-    
-  - name: mean_reversion
-    type: mean_reversion
-    lookback: 5
-    threshold: 2.0`}
-                  </pre>
-                </div>
-              )}
-              
-              {selectedNode === 'strategy' && (
-                <div className="config-editor">
-                  <pre className="code-block">
-{`# 策略配置
-strategy:
-  name: alpha_momentum
-  type: long_short
-  
-weights:
-  momentum_20d: 0.4
-  volume_trend: 0.25
-  mean_reversion: 0.35
-  
-risk_controls:
-  max_position_size: 0.05
-  sector_exposure_limit: 0.2
-  leverage: 1.0`}
-                  </pre>
-                </div>
-              )}
-              
-              {selectedNode === 'backtest' && (
-                <div className="config-editor">
-                  <pre className="code-block">
-{`# 回测配置
-period:
-  start: 2024-01-01
-  end: 2024-03-31
-  
-market_impact:
-  slippage: 0.001
-  transaction_cost: 0.0005
-  
-capital: 1000000
-rebalance: daily`}
-                  </pre>
-                </div>
-              )}
-              
-              {selectedNode === 'live' && (
-                <div className="config-editor">
-                  <pre className="code-block">
-{`# 实时交易配置
-exchange: alpaca
-api_key: "****"
-api_secret: "****"
-
-trade_settings:
-  max_positions: 10
-  order_type: market
-  rebalance_time: "16:00 EST"
-  
-notifications:
-  email: true
-  webhook: false`}
-                  </pre>
-                </div>
-              )}
-              
-              <div className="chat-prompt-card">
-                <h5>需要修改这些配置?</h5>
-                <p>使用Agent聊天面板发送修改指令，无需直接编辑代码。</p>
-                <div className="chat-prompt-examples">
-                  <div className="chat-prompt-example" onClick={() => {
-                    const examplePanel = document.querySelector('.chat-panel-input input');
-                    if (examplePanel) {
-                      examplePanel.focus();
-                      examplePanel.value = `修改${selectedNode}的配置参数`;
-                    }
-                  }}>
-                    修改这些参数
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {activeTab === 'history' && (
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h4 style={{ margin: 0 }}>版本历史</h4>
-                <button className="btn">创建快照</button>
-              </div>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  backgroundColor: 'var(--surface-color)',
-                  padding: '12px 16px',
-                  borderRadius: 'var(--border-radius-md)',
-                  boxShadow: 'var(--box-shadow)'
-                }}>
-                  <div>
-                    <div style={{ fontWeight: '500' }}>添加了交易量因子</div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Apr 15, 2025 • 10:45 AM</div>
-                  </div>
-                  <button className="btn">恢复</button>
-                </div>
-                
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  backgroundColor: 'var(--surface-color)',
-                  padding: '12px 16px',
-                  borderRadius: 'var(--border-radius-md)',
-                  boxShadow: 'var(--box-shadow)'
-                }}>
-                  <div>
-                    <div style={{ fontWeight: '500' }}>优化了策略权重</div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Apr 10, 2025 • 2:30 PM</div>
-                  </div>
-                  <button className="btn">恢复</button>
-                </div>
-                
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  backgroundColor: 'var(--surface-color)',
-                  padding: '12px 16px',
-                  borderRadius: 'var(--border-radius-md)',
-                  boxShadow: 'var(--box-shadow)'
-                }}>
-                  <div>
-                    <div style={{ fontWeight: '500' }}>初始配置</div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Apr 1, 2025 • 9:15 AM</div>
-                  </div>
-                  <button className="btn">恢复</button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
   };
 
   // Main component return
@@ -616,14 +218,41 @@ notifications:
     <div className="bento-container">
       <main className="bento-main">
         <div className="bento-header">
-          <Link to="/" className="bento-title">
-            {project.name}
-          </Link>
-          <div className="project-actions">
+          <div className="bento-header-left">
+            <Link to="/" className="bento-title">
+              VibeQuant | {project.name}
+            </Link>
             <span className={`project-status ${project.status}`}>
               <span className="status-indicator"></span>
               {project.status === 'live' ? '运行中' : project.status === 'paused' ? '暂停' : '空闲'}
             </span>
+          </div>
+          
+          <div className="bento-trading-metrics">
+            <div className="trading-metric">
+              <div className="metric-label">账户价值</div>
+              <div className="metric-value">¥{project.currentValue.toLocaleString()}</div>
+            </div>
+            <div className="trading-metric">
+              <div className="metric-label">回报率</div>
+              <div className={`metric-value ${project.returns >= 0 ? 'positive' : 'negative'}`}>
+                {project.returns >= 0 ? '+' : ''}{project.returns}%
+              </div>
+            </div>
+            <div className="trading-metric">
+              <div className="metric-label">年化收益</div>
+              <div className={`metric-value ${project.annualizedReturn >= 0 ? 'positive' : 'negative'}`}>
+                {project.annualizedReturn >= 0 ? '+' : ''}{project.annualizedReturn}%
+              </div>
+            </div>
+            <div className="trading-metric">
+              <div className="metric-label">最大回撤</div>
+              <div className="metric-value negative">-{project.maxDrawdown}%</div>
+            </div>
+            <div className="trading-metric">
+              <div className="metric-label">胜率</div>
+              <div className="metric-value">{project.winRate}%</div>
+            </div>
           </div>
         </div>
 
@@ -698,15 +327,16 @@ notifications:
         </div>
 
         <div className="bento-content">
-          {renderNodeDetails()}
+          {renderModuleContent(selectedNode)}
         </div>
       </main>
 
       <aside className="bento-chat-area">
-        <ChatPanel 
+        <AutoAgentChatPanel 
           initialMessages={chatMessages} 
           onSendMessage={handleSendMessage} 
           selectedNode={selectedNode}
+          onModuleChange={handleModuleChange}
         />
       </aside>
     </div>
